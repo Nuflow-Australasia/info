@@ -247,13 +247,33 @@ html.drawer-lock{overflow:hidden}
 .library{--gut:32px}
 @media(max-width:560px){.sector,.library{--gut:22px}}
 
+/* ---- hero scroll zone: the stage is held by CSS sticky (browser-driven, no jitter) for 165% of a screen ---- */
+.hero{height:265vh}
+.hero-sticky{position:sticky;top:0}
+@media(prefers-reduced-motion:reduce){.hero{height:100vh}.hero-sticky{position:relative}}
+
+/* ---- phones and touch screens: drop effects that are expensive to redraw while scrolling ---- */
+@media(max-width:860px),(hover:none){
+  .pan{filter:none}
+  .layer.spot{display:none}
+  .backdrop::after{animation:none}
+  #skyGlow,#skyTravel,#skyTravelB{display:none}
+  .hero-sky{backface-visibility:hidden}
+  .nav.grounded{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,17,48,.96)}
+  .eyebrow{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.9)}
+  .hero-sectors a{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,17,48,.86)}
+  .secbar{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,17,48,.98)}
+  .surface,.zone-label,.menu{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .surface{background:rgba(11,17,48,.9)}
+}
+
 /* ---- phones: the island hotspots collide with the headline, so use sector buttons instead ---- */
 .hero-sectors{display:none}
 @media(max-width:720px){
   .zones,.hint{display:none}
   /* 100vh on phones includes the area behind the browser's address bar; svh is the visible height */
-  .hero,.hero-sticky{height:100vh;height:100svh}
-  .hero-sticky{min-height:0}
+  .hero{height:265vh;height:265svh}
+  .hero-sticky{height:100vh;height:100svh;min-height:0}
   .hero-ui{bottom:calc(18px + env(safe-area-inset-bottom))}
   .hero-ui .cycler{display:none}
   .hero-ui h1{font-size:clamp(1.8rem,8.4vw,2.4rem)}
