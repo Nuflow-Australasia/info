@@ -211,7 +211,7 @@ html.pl-lock{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.marquee{animation:none}.cyc-list{transition:none}html{scroll-behavior:auto}.hint .chev,.surface svg{animation:none}.pan .var{transition:none}.hero{height:100vh}.hero-sticky{position:relative}.backdrop::after{animation:none}}
 @media(max-width:560px){.sector{padding:96px 22px}.sector-hero{margin-top:-96px;max-height:52vh}.sector .sector-inner{margin-top:-14vh}.statement{padding:14vh 22px 10vh}.zone-label{font-size:11px}}
 </style>
-<link rel="stylesheet" href="assets/css/resources.css?v=7">
+<link rel="stylesheet" href="assets/css/resources.css?v=8">
 </head>
 <body>
 <div class="preloader" id="preloader" aria-hidden="true"><div class="pre-inner">
@@ -251,10 +251,11 @@ html.pl-lock{overflow:hidden}
 <section class="hero" id="hero">
   <div class="hero-sticky">
     <div class="hero-photo" id="heroPhoto">
+      <img class="hero-sky" id="heroSky" src="assets/img/hero-clouds.webp" alt="" aria-hidden="true" fetchpriority="high">
       <div class="pan" id="pan">
-        <img class="layer base" id="baseImg" src="assets/img/island.jpg" alt="A floating island above the clouds showing suburbs, city, infrastructure and industry">
+        <img class="layer base" id="baseImg" src="assets/img/hero-island.webp" fetchpriority="high" alt="A floating island above the clouds showing suburbs, city, infrastructure and industry">
         <div class="photo-dim" aria-hidden="true"></div>
-        <img class="layer spot" id="spotImg" src="assets/img/island-highlight.jpg" alt="" aria-hidden="true">
+        <img class="layer spot" id="spotImg" src="assets/img/hero-island.webp" alt="" aria-hidden="true">
       </div>
     </div>
     <div class="hero-scrim"></div>
@@ -262,10 +263,10 @@ html.pl-lock{overflow:hidden}
     <div class="cloud-overlay" id="cloudOverlay"></div>
 
     <div class="zones" id="zones">
-      <button class="zone" data-sector="residential"   style="left:2%;width:32%;top:30%;height:28%"  data-name="Residential & Strata"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Residential & Strata<small>Homes · Body corp</small></span></span></button>
-      <button class="zone" data-sector="facility"       style="left:24%;width:24%;top:6%;height:20%" data-name="Facility Management"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Facility Management<small>Commercial</small></span></span></button>
-      <button class="zone" data-sector="infrastructure" style="left:44%;width:26%;top:26%;height:30%" data-name="Infrastructure"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Infrastructure<small>Councils · Civil</small></span></span></button>
-      <button class="zone" data-sector="mining"         style="left:62%;width:34%;top:16%;height:26%" data-name="Mining & Industrial"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Mining & Industrial<small>Resources</small></span></span></button>
+      <button class="zone" data-sector="residential"   style="left:2%;width:36%;top:26%;height:22%"  data-name="Residential & Strata"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Residential & Strata<small>Homes · Body corp</small></span></span></button>
+      <button class="zone" data-sector="facility"       style="left:22%;width:36%;top:4%;height:16%" data-name="Facility Management"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Facility Management<small>Commercial</small></span></span></button>
+      <button class="zone" data-sector="infrastructure" style="left:41%;width:20%;top:28%;height:22%" data-name="Infrastructure"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Infrastructure<small>Councils · Civil</small></span></span></button>
+      <button class="zone" data-sector="mining"         style="left:62%;width:36%;top:22%;height:18%" data-name="Mining & Industrial"><span class="zone-marker"><span class="zone-dot"></span><span class="zone-label">Mining & Industrial<small>Resources</small></span></span></button>
     </div>
 
     <div class="hero-ui" id="heroUI">
@@ -429,8 +430,8 @@ html.pl-lock{overflow:hidden}
 <script src="assets/js/gsap.min.js"></script>
 <script src="assets/js/ScrollTrigger.min.js"></script>
 <script src="assets/js/lenis.min.js"></script>
-<script src="assets/js/resources-data.js?v=7"></script>
-<script src="assets/js/resources.js?v=7"></script>
+<script src="assets/js/resources-data.js?v=8"></script>
+<script src="assets/js/resources.js?v=8"></script>
 <script>
 (function(){
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -444,7 +445,7 @@ html.pl-lock{overflow:hidden}
   const SY=()=>window.scrollY||window.pageYOffset||0;
   const hasST=!!(window.gsap&&window.ScrollTrigger);
 
-  function calcPan(){const w=photo.clientWidth||innerWidth;const rh=baseImg.naturalWidth?w*(baseImg.naturalHeight/baseImg.naturalWidth):w*2;maxPan=Math.max(0,rh-vh);}
+  const heroSky=document.getElementById('heroSky');function calcPan(){maxPan=pan.offsetTop+pan.offsetHeight+40;zones.style.left=pan.offsetLeft+'px';zones.style.top=pan.offsetTop+'px';zones.style.width=pan.offsetWidth+'px';zones.style.height=pan.offsetHeight+'px';}
   calcPan();
   if(!(baseImg.complete&&baseImg.naturalWidth)){baseImg.addEventListener('load',()=>{calcPan();renderHero(curP);if(hasST)ScrollTrigger.refresh();},{once:true});}
 
@@ -463,7 +464,7 @@ html.pl-lock{overflow:hidden}
   _measureAlt();
   function renderHero(p){
     curP=p;
-    pan.style.transform='translateY('+(-maxPan*Math.min(1,p/0.85))+'px)';
+    const q=Math.min(1,p/0.85);pan.style.transform='translateY('+(-maxPan*q).toFixed(1)+'px) scale('+(1+q*0.22).toFixed(3)+')';if(heroSky)heroSky.style.transform='translateY('+(-q*24).toFixed(2)+'%) scale('+(1.06+q*0.14).toFixed(3)+')';
     const pf=(1-smq(0.86,0.995,p)).toFixed(3);
     if(pf!==_panO){_panO=pf;pan.style.opacity=pf;}
     const vo=(clamp((p-0.55)/0.45,0,1)*0.92*(1-smq(0.90,1,p))).toFixed(3);

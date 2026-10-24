@@ -106,6 +106,29 @@ html.drawer-lock{overflow:hidden}
 .video-frame{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
 .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
+/* ---- hero: clouds behind, floating city in front ---- */
+.hero-photo{background:#7fa6d8}
+.hero-sky{position:absolute;left:0;top:0;width:100%;height:118%;object-fit:cover;object-position:50% 0;transform:scale(1.06);transform-origin:50% 0;will-change:transform;z-index:0}
+.pan{left:0;right:0;margin:0 auto;top:max(70px,7vh);width:min(94vw,calc(68vh * 941 / 1075));aspect-ratio:941/1075;transform-origin:50% 35%;z-index:1;filter:drop-shadow(0 30px 40px rgba(7,11,32,.35));
+  /* the city photo has its own sky along the top edge: fade the top and upper sides into the clouds */
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 24%),linear-gradient(to right,transparent 0%,#000 9%,#000 91%,transparent 100%);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 24%),linear-gradient(to right,transparent 0%,#000 9%,#000 91%,transparent 100%);
+  mask-composite:intersect}
+.pan .layer{width:100%;height:100%;object-fit:contain}
+.zones{right:auto;bottom:auto}
+.zone{z-index:1}
+/* hovering a sector dims the rest of the city and brightens that part */
+.photo-dim{display:none}
+.layer.base{transition:filter .45s ease}
+.hero-photo[data-active] .layer.base{filter:brightness(.62) saturate(.85)}
+.hero-photo[data-active="residential"] .layer.spot{-webkit-mask-image:radial-gradient(26% 20% at 22% 38%,#000 55%,transparent 100%);mask-image:radial-gradient(26% 20% at 22% 38%,#000 55%,transparent 100%)}
+.hero-photo[data-active="facility"] .layer.spot{-webkit-mask-image:radial-gradient(28% 16% at 40% 13%,#000 55%,transparent 100%);mask-image:radial-gradient(28% 16% at 40% 13%,#000 55%,transparent 100%)}
+.hero-photo[data-active="infrastructure"] .layer.spot{-webkit-mask-image:radial-gradient(18% 22% at 51% 40%,#000 55%,transparent 100%);mask-image:radial-gradient(18% 22% at 51% 40%,#000 55%,transparent 100%)}
+.hero-photo[data-active="mining"] .layer.spot{-webkit-mask-image:radial-gradient(24% 16% at 80% 32%,#000 55%,transparent 100%);mask-image:radial-gradient(24% 16% at 80% 32%,#000 55%,transparent 100%)}
+@media(max-width:720px){.pan{top:62px;width:92vw}}
+@media(prefers-reduced-motion:reduce){.hero-sky{transform:none}}
+
 /* ---- sector colours, matching the booklets ----
    --sec: the booklet colour (fills, borders) · --sec-text: readable on the dark navy · --sec-on: text on a --sec fill */
 #residential,[data-s="residential"],[data-sec="residential"],[data-sector="residential"]{--sec:#4dc8ed;--sec-text:#4dc8ed;--sec-on:#0b1130}
