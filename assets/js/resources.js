@@ -42,12 +42,25 @@
     return '<div class="case '+(cls||'')+'"><div class="case-img"><img loading="lazy" referrerpolicy="no-referrer" src="'+thumbUrl(c.id,600)+'" alt="" onerror="this.remove()"><span class="case-tag">'+esc(c.system)+'</span></div>'+
       '<div class="case-body"><span class="kicker">Case study · PDF</span><h4>'+esc(c.title)+'</h4>'+actions(c,c.title+' case study')+'</div></div>';
   }
+  /* a video is either YouTube ({yt}) or Vimeo ({vimeo, h?, thumb}); h = the private-link hash */
+  function videoInfo(v){
+    if(v.vimeo) return {
+      embed:'https://player.vimeo.com/video/'+encodeURIComponent(v.vimeo)+'?autoplay=1'+(v.h?'&h='+encodeURIComponent(v.h):''),
+      link:'https://vimeo.com/'+encodeURIComponent(v.vimeo)+(v.h?'/'+encodeURIComponent(v.h):''),
+      thumb:v.thumb||'', site:'Vimeo'};
+    return {
+      embed:'https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.yt)+'?autoplay=1&rel=0',
+      link:'https://www.youtube.com/watch?v='+encodeURIComponent(v.yt),
+      thumb:'https://i.ytimg.com/vi/'+encodeURIComponent(v.yt)+'/hqdefault.jpg', site:'YouTube'};
+  }
   function videoCard(v,cls){
-    return '<div class="case video '+(cls||'')+'"><button class="case-img" type="button" data-yt="'+esc(v.yt)+'" data-title="'+esc(v.title)+'" aria-label="Play video: '+esc(v.title)+'">'+
-      '<img loading="lazy" src="https://i.ytimg.com/vi/'+esc(v.yt)+'/hqdefault.jpg" alt=""><span class="play">'+ICON.play+'</span><span class="case-tag">Video</span></button>'+
-      '<div class="case-body"><span class="kicker">Case study · Video</span><h4>'+esc(v.title)+'</h4><div class="doc-actions">'+
-      '<button class="btn-sm" type="button" data-yt="'+esc(v.yt)+'" data-title="'+esc(v.title)+'">'+ICON.play+'Watch</button>'+
-      '<a class="btn-sm ghost" href="https://www.youtube.com/watch?v='+esc(v.yt)+'" target="_blank" rel="noopener">YouTube</a></div></div></div>';
+    const i=videoInfo(v);
+    const play='data-video="'+esc(i.embed)+'" data-link="'+esc(i.link)+'" data-site="'+i.site+'" data-title="'+esc(v.title)+'"';
+    return '<div class="case video '+(cls||'')+'"><button class="case-img" type="button" '+play+' aria-label="Play video: '+esc(v.title)+'">'+
+      (i.thumb?'<img loading="lazy" src="'+esc(i.thumb)+'" alt="">':'')+'<span class="play">'+ICON.play+'</span><span class="case-tag">'+esc(v.system||'Video')+'</span></button>'+
+      '<div class="case-body"><span class="kicker">Video</span><h4>'+esc(v.title)+'</h4><div class="doc-actions">'+
+      '<button class="btn-sm" type="button" '+play+'>'+ICON.play+'Watch</button>'+
+      '<a class="btn-sm ghost" href="'+esc(i.link)+'" target="_blank" rel="noopener">'+i.site+'</a></div></div></div>';
   }
 
   /* ---- top menu: booklets dropdown ---- */
@@ -149,11 +162,12 @@
   /* ---- video player ---- */
   const vm=$('videoModal'), vf=$('videoFrame'), vt=$('videoTitle');
   let lastFocus=null;
-  function openVideo(id,title){
+  function openVideo(b){
     lastFocus=document.activeElement;
-    vf.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(id)+'?autoplay=1&rel=0';
-    vt.textContent=title||'';
-    $('videoYT').href='https://www.youtube.com/watch?v='+encodeURIComponent(id);
+    vf.src=b.dataset.video;
+    vt.textContent=b.dataset.title||'';
+    $('videoYT').href=b.dataset.link;
+    $('videoYT').textContent='Open in '+(b.dataset.site||'YouTube');
     vm.classList.add('open');vm.setAttribute('aria-hidden','false');lenisStop();
     $('videoClose').focus();
   }
@@ -163,7 +177,7 @@
     lastFocus&&lastFocus.focus&&lastFocus.focus();
   }
   if(vm){
-    document.addEventListener('click',e=>{const b=e.target.closest('[data-yt]');if(b){e.preventDefault();openVideo(b.dataset.yt,b.dataset.title);}});
+    document.addEventListener('click',e=>{const b=e.target.closest('[data-video]');if(b){e.preventDefault();openVideo(b);}});
     $('videoClose').addEventListener('click',closeVideo);
     vm.addEventListener('click',e=>{if(e.target===vm)closeVideo();});
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideo();});
