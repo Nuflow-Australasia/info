@@ -63,6 +63,37 @@
       '<a class="btn-sm ghost" href="'+esc(i.link)+'" target="_blank" rel="noopener">'+i.site+'</a></div></div></div>';
   }
 
+  /* ---- carousels: on phones, grids become one-row swipe lists with a "2 / 8" counter.
+     On wider screens the CSS keeps the grid and hides the controls. ---- */
+  const ARROW_L='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+  const ARROW_R='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+  function carousel(track,label){
+    if(!track||track.closest('.carousel')) return;
+    const wrap=document.createElement('div'); wrap.className='carousel';
+    track.parentNode.insertBefore(wrap,track); wrap.appendChild(track);
+    track.classList.add('car-track'); track.setAttribute('role','region'); track.setAttribute('aria-label',label); track.tabIndex=0;
+    const ctl=document.createElement('div'); ctl.className='car-ctl';
+    ctl.innerHTML='<button type="button" class="car-btn" aria-label="Previous">'+ARROW_L+'</button><span class="car-count" aria-live="polite"></span><button type="button" class="car-btn" aria-label="Next">'+ARROW_R+'</button>';
+    wrap.appendChild(ctl);
+    const [prev,next]=ctl.querySelectorAll('button'), count=ctl.querySelector('.car-count');
+    const items=()=>[...track.children].filter(c=>c.offsetParent!==null);
+    const step=()=>{const it=items();return it.length>1?it[1].offsetLeft-it[0].offsetLeft:track.clientWidth;};
+    function update(){
+      const it=items(), n=it.length, s=step()||1;
+      const i=Math.min(n-1,Math.max(0,Math.round(track.scrollLeft/s)));
+      const atEnd=track.scrollLeft+track.clientWidth>=track.scrollWidth-4;
+      count.textContent=(atEnd?n:i+1)+' / '+n;
+      prev.disabled=track.scrollLeft<4; next.disabled=atEnd;
+      wrap.classList.toggle('single',n<2);
+    }
+    prev.addEventListener('click',()=>track.scrollBy({left:-step(),behavior:'smooth'}));
+    next.addEventListener('click',()=>track.scrollBy({left:step(),behavior:'smooth'}));
+    track.addEventListener('scroll',()=>requestAnimationFrame(update),{passive:true});
+    addEventListener('resize',update);
+    update();
+  }
+  window.__nuflowCarousel=carousel;
+
   /* ---- top menu: booklets dropdown ---- */
   const menu=$('bookletMenu'), menuBtn=$('bookletBtn');
   if(menu&&menuBtn){
@@ -106,11 +137,12 @@
     const vids=R.videos.filter(v=>inSector(v,s));
     const cases=R.cases.filter(c=>inSector(c,s));
     let h='';
+    const name=R.sectors[s];
     if(b) h+='<h3 class="s-subhead reveal">Download the booklet</h3>'+bookletCard(b,'reveal');
-    if(tds.length) h+='<h3 class="s-subhead reveal">Technical data sheets</h3><div class="reveal">'+tdsList(tds)+'</div>';
+    if(tds.length) h+='<h3 class="s-subhead reveal">Technical data sheets <span class="s-count">'+tds.length+'</span></h3><div class="reveal">'+tdsList(tds)+'</div>';
     const cards=vids.length+cases.length;
     if(cards){
-      h+='<h3 class="s-subhead reveal">Case studies</h3><div class="case-grid">';
+      h+='<h3 class="s-subhead reveal">Case studies <span class="s-count">'+cards+'</span></h3><div class="case-grid">';
       let i=0;
       vids.forEach(v=>{h+=videoCard(v,'reveal'+(i++>=SHOW?' extra':''));});
       cases.forEach(c=>{h+=caseCard(c,'reveal'+(i++>=SHOW?' extra':''));});
@@ -125,6 +157,10 @@
       more.textContent=open?'Show fewer case studies':'Show all '+cards+' case studies';
       try{window.ScrollTrigger&&ScrollTrigger.refresh();}catch(e){}
     });
+    const sec=box.closest('.sector');
+    carousel(sec&&sec.querySelector('.asset-grid'),name+': what we rehabilitate');
+    carousel(box.querySelector('.tds-list'),name+': technical data sheets');
+    carousel(box.querySelector('.case-grid'),name+': case studies');
   });
 
   /* ---- resource library ---- */
@@ -148,6 +184,7 @@
           '<p class="lib-note">More videos on <a href="https://www.youtube.com/@NuflowAustralasia" target="_blank" rel="noopener">youtube.com/@NuflowAustralasia</a></p>';
       }
       lib.innerHTML=h||'<p class="lib-note">Nothing in this category yet.</p>';
+      lib.querySelectorAll('.booklet-grid,.tds-list,.case-grid').forEach(el=>carousel(el,'Resources'));
       try{window.ScrollTrigger&&ScrollTrigger.refresh();}catch(e){}
     }
     tabs.forEach(t=>t.addEventListener('click',()=>{tab=t.dataset.tab;tabs.forEach(x=>x.setAttribute('aria-selected',x===t?'true':'false'));render();}));
@@ -182,6 +219,44 @@
     vm.addEventListener('click',e=>{if(e.target===vm)closeVideo();});
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideo();});
   }
+
+  /* ---- phones/tablets: sticky bar under the menu showing which sector you are in ---- */
+  const bar=$('secbar'), nav=$('nav');
+  if(bar&&'IntersectionObserver' in window){
+    const pills=[...bar.querySelectorAll('a')];
+    const secs=pills.map(a=>document.getElementById(a.dataset.s)).filter(Boolean);
+    let current=null;
+    const place=()=>{bar.style.top=(nav?nav.offsetHeight:56)+'px';};
+    function setActive(id){
+      if(id===current) return; current=id;
+      bar.classList.toggle('show',!!id);
+      pills.forEach(a=>{const on=a.dataset.s===id;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});
+      const a=pills.find(p=>p.dataset.s===id);
+      if(a) bar.scrollTo({left:a.offsetLeft-(bar.clientWidth-a.offsetWidth)/2,behavior:'smooth'});
+      place();
+    }
+    const live=new Set();
+    const io=new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting)live.add(e.target.id);else live.delete(e.target.id);});
+      const id=secs.map(x=>x.id).find(x=>live.has(x))||null;
+      setActive(id);
+    },{rootMargin:'-40% 0px -55% 0px'});
+    secs.forEach(x=>io.observe(x));
+    addEventListener('resize',place); place();
+  }
+
+  /* ---- phones: long sector intros show four lines with a Read more toggle ---- */
+  document.querySelectorAll('.sector .s-intro').forEach(p=>{
+    p.classList.add('clamp');
+    const btn=document.createElement('button');
+    btn.type='button'; btn.className='read-more reveal'; btn.textContent='Read more'; btn.setAttribute('aria-expanded','false');
+    btn.addEventListener('click',()=>{
+      const open=p.classList.toggle('open');
+      btn.textContent=open?'Show less':'Read more'; btn.setAttribute('aria-expanded',open?'true':'false');
+      try{window.ScrollTrigger&&ScrollTrigger.refresh();}catch(e){}
+    });
+    p.after(btn);
+  });
 
   /* ---- touch devices have no hover: reword the hero hint ---- */
   if(matchMedia('(hover: none)').matches){
