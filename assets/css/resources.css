@@ -257,7 +257,11 @@ html.drawer-lock{overflow:hidden}
   .pan{filter:none}
   .layer.spot{display:none}
   .backdrop::after{animation:none}
-  #skyGlow,#skyTravel,#skyTravelB{display:none}
+  /* scroll clouds: sized in lvh (largest viewport) so the address bar sliding in/out never resizes them */
+  #skyGlow{inset:auto 0 auto 0;top:0;height:100lvh}
+  #skyTravel{inset:auto 0 auto 0;top:-6lvh;height:112lvh}
+  #skyTravelB{inset:auto 0 auto 0;top:-8lvh;height:116lvh}
+  .descent .d-clouds{top:-25lvh;height:150lvh}.descent .d-clouds.d-back{top:-30lvh;height:160lvh}
   .hero-sky{backface-visibility:hidden}
   .nav.grounded{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(11,17,48,.96)}
   .eyebrow{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.9)}
@@ -266,6 +270,21 @@ html.drawer-lock{overflow:hidden}
   .surface,.zone-label,.menu{backdrop-filter:none;-webkit-backdrop-filter:none}
   .surface{background:rgba(11,17,48,.9)}
 }
+
+/* ---- phones: cloud cover for the sector descent (resources.js __mFlight) ----
+   in: sky + fill fade in while the cloud layers sweep across; out: everything fades, then it all resets unseen */
+.descent.m-flight .d-sky,.descent.m-flight .d-fill,.descent.m-flight .d-label{transition:opacity .45s ease}
+.descent.m-flight .d-clouds{transition:transform 1.4s cubic-bezier(.25,.6,.3,1),opacity .55s ease}
+.descent.m-on .d-sky{opacity:1}
+.descent.m-on .d-fill{opacity:.94}
+.descent.m-on .d-label{opacity:1}
+.descent.m-on .d-clouds{transform:translateY(-30%)}
+.descent.m-on .d-clouds.d-back{transform:translateY(-15%) scale(1.16)}
+.descent.m-up .d-clouds{transform:translateY(-140%)}
+.descent.m-up .d-clouds.d-back{transform:translateY(-150%) scale(1.16)}
+.descent.m-on.m-up .d-clouds{transform:translateY(20%)}
+.descent.m-on.m-up .d-clouds.d-back{transform:translateY(30%) scale(1.16)}
+.descent.m-out .d-sky,.descent.m-out .d-fill,.descent.m-out .d-label,.descent.m-out .d-clouds{opacity:0}
 
 /* ---- phones: the island hotspots collide with the headline, so use sector buttons instead ---- */
 .hero-sectors{display:none}

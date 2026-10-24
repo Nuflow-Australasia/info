@@ -223,6 +223,29 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideo();});
   }
 
+  /* ---- phones: sector descent / return to surface. The clouds sweep in and cover the screen, the page jumps
+     once to the target while covered, then the clouds clear. Only opacity and transform change, so the phone's
+     compositor runs it smoothly (the desktop version scrolls the page frame by frame instead). ---- */
+  let mBusy=false;
+  window.__mFlight=function(ty,dir,name){
+    const d=$('descent'); if(!d||mBusy) return; mBusy=true;
+    const lenis=window.__lenis;
+    try{d.querySelector('.d-label .k').textContent=dir>0?'Descending to':'Ascending to';$('dName').textContent=name||'';$('dAlt').textContent='';}catch(e){}
+    d.classList.remove('m-on','m-out','m-up','m-flight');
+    d.classList.toggle('m-up',dir<0);         /* going up: park the clouds above the screen (no transition yet) */
+    void d.offsetWidth;
+    d.classList.add('m-flight');              /* then switch transitions on and start moving */
+    void d.offsetWidth;
+    d.classList.add('m-on');
+    try{lenis&&lenis.stop();}catch(e){}
+    setTimeout(()=>{                          /* screen is covered: jump */
+      try{lenis&&lenis.start();lenis?lenis.scrollTo(ty,{immediate:true,force:true}):scrollTo(0,ty);}catch(e){scrollTo(0,ty);}
+      try{window.ScrollTrigger&&ScrollTrigger.update();}catch(e){}
+    },560);
+    setTimeout(()=>d.classList.add('m-out'),760);
+    setTimeout(()=>{d.classList.remove('m-flight','m-on','m-out','m-up');mBusy=false;},1500);
+  };
+
   /* ---- hero clouds: a fixed layer that fades out as "Who we are" scrolls up from the bottom of the screen ---- */
   const sky=$('heroSky'), who=$('who');
   if(sky&&who){
