@@ -223,6 +223,22 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideo();});
   }
 
+  /* ---- hero clouds: a fixed layer that fades out as "Who we are" scrolls up from the bottom of the screen ---- */
+  const sky=$('heroSky'), who=$('who');
+  if(sky&&who){
+    let skyPend=false, lastOp='';
+    function skyFade(){
+      skyPend=false;
+      const vh=innerHeight, top=who.getBoundingClientRect().top;
+      const t=Math.min(1,Math.max(0,(1.45*vh-top)/(0.95*vh))), e=t*t*(3-2*t);
+      const op=(1-e).toFixed(3);
+      if(op!==lastOp){lastOp=op;sky.style.opacity=op;sky.style.visibility=e>=1?'hidden':'visible';}
+    }
+    addEventListener('scroll',()=>{if(!skyPend){skyPend=true;requestAnimationFrame(skyFade);}},{passive:true});
+    addEventListener('resize',skyFade); addEventListener('load',skyFade);
+    skyFade();
+  }
+
   /* ---- phones/tablets: sticky bar under the menu showing which sector you are in ---- */
   const bar=$('secbar'), nav=$('nav');
   if(bar&&'IntersectionObserver' in window){

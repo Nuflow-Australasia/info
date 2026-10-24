@@ -211,7 +211,7 @@ html.pl-lock{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.marquee{animation:none}.cyc-list{transition:none}html{scroll-behavior:auto}.hint .chev,.surface svg{animation:none}.pan .var{transition:none}.hero{height:100vh}.hero-sticky{position:relative}.backdrop::after{animation:none}}
 @media(max-width:560px){.sector{padding:96px 22px}.sector-hero{margin-top:-96px;max-height:52vh}.sector .sector-inner{margin-top:-14vh}.statement{padding:14vh 22px 10vh}.zone-label{font-size:11px}}
 </style>
-<link rel="stylesheet" href="assets/css/resources.css?v=11">
+<link rel="stylesheet" href="assets/css/resources.css?v=14">
 </head>
 <body>
 <div class="preloader" id="preloader" aria-hidden="true"><div class="pre-inner">
@@ -220,6 +220,7 @@ html.pl-lock{overflow:hidden}
   <div class="pre-bar"><i id="preBar"></i></div>
 </div></div>
 <div class="backdrop" aria-hidden="true"></div>
+<img class="hero-sky" id="heroSky" src="assets/img/hero-clouds.webp" alt="" aria-hidden="true" fetchpriority="high">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="cloudShape" viewBox="0 0 1200 220"><path fill="currentColor" d="M0,220 L0,150 C40,120 95,128 130,150 C150,95 215,70 270,95 C300,40 390,30 430,80 C480,35 575,45 600,100 C640,55 730,60 755,110 C805,70 895,85 905,140 C955,120 1010,128 1045,152 C1090,128 1150,135 1200,158 L1200,220 Z"/></symbol>
 </defs></svg>
@@ -251,7 +252,6 @@ html.pl-lock{overflow:hidden}
 <section class="hero" id="hero">
   <div class="hero-sticky">
     <div class="hero-photo" id="heroPhoto">
-      <img class="hero-sky" id="heroSky" src="assets/img/hero-clouds.webp" alt="" aria-hidden="true" fetchpriority="high">
       <div class="pan" id="pan">
         <img class="layer base" id="baseImg" src="assets/img/hero-island.webp" fetchpriority="high" alt="A floating island above the clouds showing suburbs, city, infrastructure and industry">
         <div class="photo-dim" aria-hidden="true"></div>
@@ -294,7 +294,6 @@ html.pl-lock{overflow:hidden}
 </div>
 
 <div class="ground" id="ground">
-<div class="cloud-seam" aria-hidden="true"></div>
   
 <section class="statement" id="who">
   <div class="chapter reveal">Who we are</div>
@@ -431,8 +430,8 @@ html.pl-lock{overflow:hidden}
 <script src="assets/js/gsap.min.js"></script>
 <script src="assets/js/ScrollTrigger.min.js"></script>
 <script src="assets/js/lenis.min.js"></script>
-<script src="assets/js/resources-data.js?v=11"></script>
-<script src="assets/js/resources.js?v=11"></script>
+<script src="assets/js/resources-data.js?v=14"></script>
+<script src="assets/js/resources.js?v=14"></script>
 <script>
 (function(){
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -107,8 +107,23 @@ html.drawer-lock{overflow:hidden}
 .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
 /* ---- hero: clouds behind, floating city in front ---- */
-.hero-photo{background:#7fa6d8}
-.hero-sky{position:absolute;left:0;top:0;width:100%;height:118%;object-fit:cover;object-position:50% 0;transform:scale(1.06);transform-origin:50% 0;will-change:transform;z-index:0}
+/* fixed behind everything (above the dark backdrop), so the clouds never end in a visible edge */
+.hero-sky{position:fixed;left:0;top:0;width:100%;height:118vh;object-fit:cover;object-position:50% 0;transform:scale(1.06);transform-origin:50% 0;will-change:transform,opacity;z-index:0;pointer-events:none}
+
+/* ---- sector header images: the whole image, with the title sitting over its darkened lower part ---- */
+.sector-hero{max-height:none;margin-bottom:24px;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 95%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,#000 7%,#000 95%,transparent 100%)}
+.sector-hero .hero-img{top:0;height:100%;transform:none!important}
+.sector-hero::after{background:linear-gradient(to bottom,rgba(7,11,32,0) 0%,rgba(7,11,32,0) 45%,rgba(9,13,36,.5) 70%,rgba(9,13,36,.9) 100%)}
+/* pull the icon, sector tag and headline up so the headline starts about 70% of the way down the image */
+.sector .sector-inner{margin-top:calc(-16vw - 150px)}
+.sector h2{text-shadow:0 2px 18px rgba(4,7,20,.85),0 1px 3px rgba(4,7,20,.6)}
+@media(max-width:560px){
+  .sector-hero{max-height:none;margin-bottom:12px}
+  .sector .s-icon{display:none}
+  .sector .sector-inner{margin-top:calc(-20.5vw - 58px)}
+}
 /* the city is wider than the screen and starts at the very top, so its top and side edges are never in view */
 .pan{top:0;left:calc(50% - 56vw);right:auto;margin:0;width:112vw;aspect-ratio:941/1075;transform-origin:50% 30%;z-index:1;filter:drop-shadow(0 30px 40px rgba(7,11,32,.35))}
 /* wider screens: the city is very tall at full width, so lift it (trimming sky) to bring the hotspots up */
@@ -126,11 +141,6 @@ html.drawer-lock{overflow:hidden}
 .hero-photo[data-active="mining"] .layer.spot{-webkit-mask-image:radial-gradient(24% 16% at 80% 32%,#000 55%,transparent 100%);mask-image:radial-gradient(24% 16% at 80% 32%,#000 55%,transparent 100%)}
 @media(prefers-reduced-motion:reduce){.hero-sky{transform:none}}
 
-/* mist band over the join between the hero and "Who we are": the join sits at 57% of its height */
-.cloud-seam{position:relative;z-index:11;height:70vh;margin:-40vh 0 -30vh;pointer-events:none;
-  background:url("../img/cloud-a.webp") 50% 50%/auto 100% repeat-x,url("../img/cloud-b.webp") 20% 52%/auto 95% repeat-x,url("../img/cloud-a.webp") 80% 58%/auto 85% repeat-x;
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.35) 22%,#000 46%,#000 68%,transparent 100%);
-  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.35) 22%,#000 46%,#000 68%,transparent 100%)}
 .statement{padding-top:26vh}
 
 /* ---- sector colours, matching the booklets ----
