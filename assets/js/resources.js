@@ -25,10 +25,10 @@
     '</div>';
   }
   function bookletRow(b){
-    return '<div class="menu-doc"><div><b>'+esc(R.sectors[b.sector])+'</b><small>PDF · '+size(b.mb)+'</small></div>'+actions(b)+'</div>';
+    return '<div class="menu-doc" data-sector="'+b.sector+'"><div><b>'+esc(R.sectors[b.sector])+'</b><small>PDF · '+size(b.mb)+'</small></div>'+actions(b)+'</div>';
   }
   function bookletCard(b,cls){
-    return '<div class="booklet '+(cls||'')+'"><div class="booklet-cover"><img loading="lazy" referrerpolicy="no-referrer" src="'+thumbUrl(b.id,400)+'" alt="" onerror="this.remove()">'+ICON.doc+'</div>'+
+    return '<div class="booklet '+(cls||'')+'" data-sector="'+b.sector+'"><div class="booklet-cover"><img loading="lazy" referrerpolicy="no-referrer" src="'+thumbUrl(b.id,400)+'" alt="" onerror="this.remove()">'+ICON.doc+'</div>'+
       '<div class="booklet-body"><span class="kicker">Sector booklet</span><h4>'+esc(b.title)+'</h4><p>PDF · '+size(b.mb)+'</p>'+actions(b)+'</div></div>';
   }
   function tdsList(items){
@@ -139,7 +139,9 @@
     let h='';
     const name=R.sectors[s];
     if(b) h+='<h3 class="s-subhead reveal">Download the booklet</h3>'+bookletCard(b,'reveal');
-    if(tds.length) h+='<h3 class="s-subhead reveal">Technical data sheets <span class="s-count">'+tds.length+'</span></h3><div class="reveal">'+tdsList(tds)+'</div>';
+    if(tds.length) h+='<details class="tds-drop reveal"><summary>Technical data sheets <span class="s-count">'+tds.length+'</span>'+
+      '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>'+
+      '<div class="tds-drop-body">'+tdsList(tds)+'</div></details>';
     const cards=vids.length+cases.length;
     if(cards){
       h+='<h3 class="s-subhead reveal">Case studies <span class="s-count">'+cards+'</span></h3><div class="case-grid">';
@@ -159,7 +161,8 @@
     });
     const sec=box.closest('.sector');
     carousel(sec&&sec.querySelector('.asset-grid'),name+': what we rehabilitate');
-    carousel(box.querySelector('.tds-list'),name+': technical data sheets');
+    const drop=box.querySelector('.tds-drop');
+    if(drop) drop.addEventListener('toggle',()=>{try{window.ScrollTrigger&&ScrollTrigger.refresh();}catch(e){}});
     carousel(box.querySelector('.case-grid'),name+': case studies');
   });
 
@@ -229,7 +232,7 @@
     const place=()=>{bar.style.top=(nav?nav.offsetHeight:56)+'px';};
     function setActive(id){
       if(id===current) return; current=id;
-      bar.classList.toggle('show',!!id);
+      bar.classList.toggle('show',!!id); bar.dataset.active=id||'';
       pills.forEach(a=>{const on=a.dataset.s===id;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});
       const a=pills.find(p=>p.dataset.s===id);
       if(a) bar.scrollTo({left:a.offsetLeft-(bar.clientWidth-a.offsetWidth)/2,behavior:'smooth'});

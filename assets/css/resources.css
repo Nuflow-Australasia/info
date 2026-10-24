@@ -106,6 +106,63 @@ html.drawer-lock{overflow:hidden}
 .video-frame{position:relative;aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}
 .video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
 
+/* ---- sector colours, matching the booklets ----
+   --sec: the booklet colour (fills, borders) · --sec-text: readable on the dark navy · --sec-on: text on a --sec fill */
+#residential,[data-s="residential"],[data-sec="residential"],[data-sector="residential"]{--sec:#4dc8ed;--sec-text:#4dc8ed;--sec-on:#0b1130}
+#facility,[data-s="facility"],[data-sec="facility"],[data-sector="facility"]{--sec:#802673;--sec-text:#d690cb;--sec-on:#fff}
+#infrastructure,[data-s="infrastructure"],[data-sec="infrastructure"],[data-sector="infrastructure"]{--sec:#0a6242;--sec-text:#5fcf9c;--sec-on:#fff}
+#mining,[data-s="mining"],[data-sec="mining"],[data-sector="mining"]{--sec:#f7941d;--sec-text:#f7941d;--sec-on:#0b1130}
+
+.sector .s-eyebrow{background:var(--sec);color:var(--sec-on);padding:7px 14px;border-radius:999px}
+.sector h2 .accent,.sector .s-subhead,.sector .kicker,.sector .read-more{color:var(--sec-text)}
+.sector .index{color:color-mix(in srgb,var(--sec) 14%,transparent)}
+.sector .s-icon{color:var(--sec-text);background:color-mix(in srgb,var(--sec) 20%,transparent);border-color:color-mix(in srgb,var(--sec) 60%,transparent)}
+.sector .asset,.sector .case{border-color:color-mix(in srgb,var(--sec) 35%,transparent)}
+.sector .asset h4::before{background:var(--sec-text);box-shadow:0 0 8px color-mix(in srgb,var(--sec) 70%,transparent)}
+.sector .chip{background:color-mix(in srgb,var(--sec) 22%,transparent);border-color:color-mix(in srgb,var(--sec) 60%,transparent)}
+.sector .s-count{background:color-mix(in srgb,var(--sec) 30%,transparent)}
+.sector .btn-sm,.sector .play{background:var(--sec);border-color:var(--sec);color:var(--sec-on)}
+.sector .btn-sm:hover{filter:brightness(1.12);background:var(--sec);border-color:var(--sec)}
+.sector .btn-sm.ghost{background:transparent;border-color:color-mix(in srgb,var(--sec) 70%,#fff 10%);color:#fff}
+.sector .btn-sm.ghost:hover{background:color-mix(in srgb,var(--sec) 22%,transparent)}
+.sector .btn-primary{background:var(--sec);color:var(--sec-on);box-shadow:0 10px 26px color-mix(in srgb,var(--sec) 40%,transparent)}
+.sector .btn-ghost{border-color:color-mix(in srgb,var(--sec) 70%,transparent)}
+.sector .booklet{background:linear-gradient(135deg,color-mix(in srgb,var(--sec) 22%,transparent),rgba(255,255,255,.03));border-color:color-mix(in srgb,var(--sec) 60%,transparent)}
+.sector .car-btn{border-color:color-mix(in srgb,var(--sec) 70%,transparent)}
+/* sector bar, side rail, hero buttons, island labels, menus and library chips pick up the same colour */
+.secbar a.active{background:var(--sec);border-color:var(--sec);color:var(--sec-on)}
+.secbar[data-active="residential"]{border-bottom-color:#4dc8ed}
+.secbar[data-active="facility"]{border-bottom-color:#802673}
+.secbar[data-active="infrastructure"]{border-bottom-color:#0a6242}
+.secbar[data-active="mining"]{border-bottom-color:#f7941d}
+.rail a.active i{background:var(--sec,var(--blueliner))!important}
+.rail a[data-r="residential"]{--sec:#4dc8ed}.rail a[data-r="facility"]{--sec:#802673}.rail a[data-r="infrastructure"]{--sec:#0a6242}.rail a[data-r="mining"]{--sec:#f7941d}
+.zone:hover .zone-label,.zone:focus-visible .zone-label{background:var(--sec);color:var(--sec-on)}
+.zone-dot{border-color:var(--sec,var(--blueliner))}
+.zone[data-sector="residential"]{--sec:#4dc8ed;--sec-on:#0b1130}.zone[data-sector="facility"]{--sec:#802673;--sec-on:#fff}.zone[data-sector="infrastructure"]{--sec:#0a6242;--sec-on:#fff}.zone[data-sector="mining"]{--sec:#f7941d;--sec-on:#0b1130}
+.hero-sectors a[href="#residential"]{--sec:#4dc8ed}.hero-sectors a[href="#facility"]{--sec:#802673}.hero-sectors a[href="#infrastructure"]{--sec:#0a6242}.hero-sectors a[href="#mining"]{--sec:#f7941d}
+.lib-chip[aria-pressed="true"][data-sec]:not([data-sec="all"]){background:var(--sec);border-color:var(--sec);color:var(--sec-on)}
+.menu-doc[data-sector] b::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--sec);margin-right:8px;vertical-align:1px}
+.booklet[data-sector]{border-color:color-mix(in srgb,var(--sec) 60%,transparent)}
+.booklet[data-sector] .kicker{color:var(--sec-text)}
+
+/* ---- pipe type cards: the photos are portrait, so show them whole instead of cropping to 16:10 ---- */
+.sector .asset-img{aspect-ratio:5/6;background:radial-gradient(120% 90% at 50% 40%,#1b2a5c,#0c1736)}
+.sector .asset-img img{object-fit:contain}
+.sector .asset-img::before{background:none}
+
+/* ---- technical data sheets dropdown ---- */
+.tds-drop{margin-top:40px;border:1px solid color-mix(in srgb,var(--sec,#4dc7ec) 45%,transparent);border-radius:14px;background:rgba(255,255,255,.035);overflow:hidden}
+.tds-drop summary{list-style:none;display:flex;align-items:center;gap:10px;min-height:56px;padding:12px 18px;cursor:pointer;font:800 13px var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--sec-text,var(--blueliner))}
+.tds-drop summary::-webkit-details-marker{display:none}
+.tds-drop summary .s-count{margin-left:0}
+.tds-drop summary .chev{margin-left:auto;width:20px;height:20px;color:#fff;transition:transform .25s}
+.tds-drop[open] summary .chev{transform:rotate(180deg)}
+.tds-drop summary:focus-visible{outline:2px solid var(--blueliner);outline-offset:-2px}
+.tds-drop-body{padding:0 14px 14px}
+.tds-drop .tds-list{grid-template-columns:repeat(auto-fill,minmax(380px,1fr))}
+@media(max-width:860px){.tds-drop .tds-list{grid-template-columns:1fr}.tds-drop{margin-top:32px}}
+
 /* ---- section counts, carousels, sector bar, intro clamp ---- */
 .s-count{display:inline-grid;place-items:center;min-width:22px;height:20px;padding:0 6px;margin-left:8px;border-radius:999px;background:rgba(77,199,236,.16);color:#fff;font:800 11px var(--body);letter-spacing:0;vertical-align:1px}
 .car-ctl{display:none}
@@ -146,7 +203,7 @@ html.drawer-lock{overflow:hidden}
   .secbar::-webkit-scrollbar{display:none}
   .secbar.show{opacity:1;transform:none;pointer-events:auto}
   .secbar a{flex:none;padding:7px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.16);color:rgba(255,255,255,.75);text-decoration:none;font:800 12.5px var(--display);white-space:nowrap}
-  .secbar a.active{background:var(--blueliner);border-color:var(--blueliner);color:var(--ink)}
+  .secbar a.active{background:var(--sec,var(--blueliner));border-color:var(--sec,var(--blueliner));color:var(--sec-on,var(--ink))}
   .secbar a span{font:500 10px var(--mono);opacity:.7;margin-right:5px}
 }
 .sector{--gut:32px}
@@ -157,12 +214,15 @@ html.drawer-lock{overflow:hidden}
 .hero-sectors{display:none}
 @media(max-width:720px){
   .zones,.hint{display:none}
-  .hero-ui{bottom:6%}
+  /* 100vh on phones includes the area behind the browser's address bar; svh is the visible height */
+  .hero,.hero-sticky{height:100vh;height:100svh}
+  .hero-sticky{min-height:0}
+  .hero-ui{bottom:calc(18px + env(safe-area-inset-bottom))}
   .hero-ui .cycler{display:none}
   .hero-ui h1{font-size:clamp(1.8rem,8.4vw,2.4rem)}
   .hero-ui .lede{font-size:.98rem;margin-top:12px}
   .hero-sectors{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:18px auto 0;max-width:420px}
-  .hero-sectors a{display:flex;align-items:center;justify-content:center;text-align:center;min-height:46px;padding:8px 10px;border-radius:12px;background:rgba(11,17,48,.72);border:1px solid rgba(77,199,236,.5);color:#fff;text-decoration:none;font:800 13px/1.2 var(--display);backdrop-filter:blur(4px)}
+  .hero-sectors a{display:flex;align-items:center;justify-content:center;text-align:center;min-height:46px;padding:8px 10px;border-radius:12px;background:rgba(11,17,48,.72);border:1px solid var(--sec,rgba(77,199,236,.5));border-left:5px solid var(--sec,rgba(77,199,236,.5));color:#fff;text-decoration:none;font:800 13px/1.2 var(--display);backdrop-filter:blur(4px)}
   .hero-sectors a:active{background:rgba(10,98,66,.92)}
 }
 
