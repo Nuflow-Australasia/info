@@ -211,7 +211,7 @@ html.pl-lock{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.marquee{animation:none}.cyc-list{transition:none}html{scroll-behavior:auto}.hint .chev,.surface svg{animation:none}.pan .var{transition:none}.hero{height:100vh}.hero-sticky{position:relative}.backdrop::after{animation:none}}
 @media(max-width:560px){.sector{padding:96px 22px}.sector-hero{margin-top:-96px;max-height:52vh}.sector .sector-inner{margin-top:-14vh}.statement{padding:14vh 22px 10vh}.zone-label{font-size:11px}}
 </style>
-<link rel="stylesheet" href="assets/css/resources.css?v=16">
+<link rel="stylesheet" href="assets/css/resources.css?v=17">
 </head>
 <body>
 <div class="preloader" id="preloader" aria-hidden="true"><div class="pre-inner">
@@ -430,8 +430,8 @@ html.pl-lock{overflow:hidden}
 <script src="assets/js/gsap.min.js"></script>
 <script src="assets/js/ScrollTrigger.min.js"></script>
 <script src="assets/js/lenis.min.js"></script>
-<script src="assets/js/resources-data.js?v=16"></script>
-<script src="assets/js/resources.js?v=16"></script>
+<script src="assets/js/resources-data.js?v=17"></script>
+<script src="assets/js/resources.js?v=17"></script>
 <script>
 (function(){
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -464,6 +464,7 @@ html.pl-lock{overflow:hidden}
   _measureAlt();
   function renderHero(p){
     curP=p;
+    if(!window.__cssScroll){
     const q=Math.min(1,p/0.85);pan.style.transform='translateY('+(-maxPan*q).toFixed(1)+'px) scale('+(1+q*0.22).toFixed(3)+')';if(heroSky)heroSky.style.transform='translateY('+(-q*24).toFixed(2)+'%) scale('+(1.06+q*0.14).toFixed(3)+')';
     const pf=(1-smq(0.86,0.995,p)).toFixed(3);
     if(pf!==_panO){_panO=pf;pan.style.opacity=pf;}
@@ -472,6 +473,7 @@ html.pl-lock{overflow:hidden}
     const uiF=innerWidth<=720?0.6:0.3;heroUI.style.opacity=clamp(1-p/uiF,0,1);heroUI.style.transform='translateY('+(-p*(innerWidth<=720?12:46))+'px)';heroUI.style.pointerEvents=p<uiF*0.8?'auto':'none';
     hint.style.opacity=clamp(1-p*4,0,1);
     zones.style.opacity=clamp(1-p/0.26,0,1);zones.style.pointerEvents=p>0.04?'none':'auto';
+    }
     altimeter.classList.toggle('show',p>0.03&&p<0.985);
     const a=Math.round(3200*(1-p));
     if(a!==_altLast){_altLast=a;altVal.textContent=a<0?0:a;}
@@ -670,6 +672,7 @@ html.pl-lock{overflow:hidden}
     window.__hideSkyTravel=hideAll;
     function update(){
       pend=false;
+      if(window.__cssScroll)return;
       if(transitioning){hideAll();return;}
       const y=SY(),vhn=innerHeight,q=clamp(y/stopY,0,1);
       const env=Math.min(clamp(y/(vhn*0.2),0,1),clamp((stopY-y)/(vhn*0.45),0,1));
@@ -727,7 +730,7 @@ html.pl-lock{overflow:hidden}
   })();
 
   try{
-    if(reduce||!hasST){throw 0;}
+    if(reduce||!hasST||window.__cssScroll){throw 0;}
     gsap.utils.toArray('.sector').forEach(sec=>{
       const items=sec.querySelectorAll('.reveal');
       gsap.set(items,{opacity:0,y:48});

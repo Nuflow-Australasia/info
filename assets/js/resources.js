@@ -1,5 +1,19 @@
 /* Builds the booklet menu, mobile drawer, per-sector documents, resource library and video player
    from window.NUFLOW_RESOURCES. Runs before the main page script so new .reveal items animate in. */
+/* Phones/tablets with CSS scroll-driven animations: the hero and cloud transition run in CSS on the browser's
+   scroll thread (see html.css-scroll in resources.css), so they move exactly with the finger. The page script
+   checks window.__cssScroll and skips its per-frame style writes. Desktop keeps the JS version. */
+(function(){
+  let on=false;
+  try{
+    on=CSS.supports('animation-timeline: scroll()')
+      && !matchMedia('(prefers-reduced-motion: reduce)').matches
+      && (innerWidth<=1023 || matchMedia('(hover: none)').matches);
+  }catch(e){}
+  window.__cssScroll=on;
+  if(on) document.documentElement.classList.add('css-scroll');
+})();
+
 (function(){
   const R=window.NUFLOW_RESOURCES; if(!R) return;
   const $=id=>document.getElementById(id);
@@ -237,9 +251,9 @@
     d.classList.add('m-flight');              /* then switch transitions on and start moving */
     void d.offsetWidth;
     d.classList.add('m-on');
-    try{lenis&&lenis.stop();}catch(e){}
-    setTimeout(()=>{                          /* screen is covered: jump */
-      try{lenis&&lenis.start();lenis?lenis.scrollTo(ty,{immediate:true,force:true}):scrollTo(0,ty);}catch(e){scrollTo(0,ty);}
+    setTimeout(()=>{                          /* screen is covered: one native jump */
+      try{window.scrollTo({top:ty,left:0,behavior:'instant'});}catch(e){scrollTo(0,ty);}
+      try{lenis&&lenis.scrollTo(ty,{immediate:true,force:true});}catch(e){}
       try{window.ScrollTrigger&&ScrollTrigger.update();}catch(e){}
     },560);
     setTimeout(()=>d.classList.add('m-out'),760);
@@ -252,6 +266,7 @@
     let skyPend=false, lastOp='';
     function skyFade(){
       skyPend=false;
+      if(window.__cssScroll) return;          /* CSS scroll timeline fades the clouds instead */
       const vh=innerHeight, top=who.getBoundingClientRect().top;
       const t=Math.min(1,Math.max(0,(1.45*vh-top)/(0.95*vh))), e=t*t*(3-2*t);
       const op=(1-e).toFixed(3);
@@ -299,6 +314,13 @@
     });
     p.after(btn);
   });
+
+  /* ---- decode the cloud overlays once the page is idle, so the first cloud transition doesn't stall on them ---- */
+  addEventListener('load',()=>{
+    (window.requestIdleCallback||function(f){setTimeout(f,120);})(()=>{
+      ['assets/img/cloud-a.webp','assets/img/cloud-b.webp'].forEach(src=>{const im=new Image();im.src=src;if(im.decode)im.decode().catch(()=>{});});
+    });
+  },{once:true});
 
   /* ---- touch devices have no hover: reword the hero hint ---- */
   if(matchMedia('(hover: none)').matches){

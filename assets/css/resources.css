@@ -317,3 +317,42 @@ html.drawer-lock{overflow:hidden}
   .video-bar{flex-direction:column;align-items:flex-start}
 }
 @media(prefers-reduced-motion:reduce){.drawer,.drawer-scrim,.menu,.video-modal{transition:none}}
+
+/* =====================================================================================================
+   Phones/tablets (html.css-scroll, set in resources.js): the hero and cloud transition are CSS
+   scroll-driven animations on the page scroll, so they run on the browser's scroll thread and move
+   exactly with the finger. Ranges are in screen heights of scroll (svh); the hero is 265svh tall, so
+   its stage is held for the first 165svh. These mirror the desktop JS version (renderHero, cloud travel).
+   ===================================================================================================== */
+@keyframes nf-city-rise{from{transform:translateY(0) scale(1)}to{transform:translateY(-112%) scale(1.22)}}
+@keyframes nf-fade-out{from{opacity:1}to{opacity:0}}
+@keyframes nf-ui-out{from{opacity:1;transform:translateY(0);visibility:visible}99%{visibility:visible}to{opacity:0;transform:translateY(-12px);visibility:hidden}}
+@keyframes nf-veil{0%,55%{opacity:0}90%{opacity:.75}100%{opacity:0}}
+@keyframes nf-sky-drift{from{transform:translateY(0) scale(1.06)}to{transform:translateY(-24%) scale(1.2)}}
+@keyframes nf-sky-fade{from{opacity:1;animation-timing-function:ease-in-out}to{opacity:0;visibility:hidden}}
+@keyframes nf-travel-a{0%{opacity:0;transform:translateY(115%) scale(1)}8.3%{opacity:1}81%{opacity:1}100%{opacity:0;transform:translateY(-117%) scale(1.08)}}
+@keyframes nf-travel-b{0%{opacity:0;transform:translateY(128%) scale(1.15)}7.5%{opacity:.9}77.6%{opacity:.9}100%{opacity:0;transform:translateY(-80%) scale(1.15)}}
+@keyframes nf-glow{0%,16%{opacity:0}50%,52%{opacity:.55}92%,100%{opacity:0}}
+@keyframes nf-reveal{from{opacity:0;transform:translateY(42px)}to{opacity:1;transform:none}}
+@keyframes nf-line{from{transform:translateY(118%)}to{transform:none}}
+
+html.css-scroll .pan{
+  animation:nf-city-rise linear both,nf-fade-out linear both;
+  animation-timeline:scroll(root),scroll(root);
+  animation-range:0 140svh,142svh 164svh}
+html.css-scroll .hero-ui{animation:nf-ui-out linear both;animation-timeline:scroll(root);animation-range:0 90svh}
+html.css-scroll .zones,html.css-scroll .hint{animation:nf-ui-out linear both;animation-timeline:scroll(root);animation-range:0 40svh}
+html.css-scroll .hero-veil{animation:nf-veil linear both;animation-timeline:scroll(root);animation-range:0 165svh}
+html.css-scroll #heroSky{
+  animation:nf-sky-drift linear both,nf-sky-fade linear both;
+  animation-timeline:scroll(root),scroll(root);
+  animation-range:0 140svh,120svh 215svh}
+html.css-scroll #skyTravel{animation:nf-travel-a linear both;animation-timeline:scroll(root);animation-range:0 240svh}
+html.css-scroll #skyTravelB{animation:nf-travel-b linear both;animation-timeline:scroll(root);animation-range:0 268svh}
+html.css-scroll #skyGlow{animation:nf-glow linear both;animation-timeline:scroll(root);animation-range:0 240svh}
+/* the frame-by-frame descent hides these with inline styles; on phones the cover-and-jump is used instead */
+html.css-scroll .descent .d-clouds{will-change:transform,opacity}
+
+/* reveals and headline lines: CSS view timelines instead of script tweens (nothing animates in JS on landing) */
+html.css-scroll .reveal{animation:nf-reveal linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+html.css-scroll .lr .lw{animation:nf-line linear both;animation-timeline:view();animation-range:entry 10% entry 70%}
