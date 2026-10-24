@@ -126,6 +126,13 @@ html.drawer-lock{overflow:hidden}
 .hero-photo[data-active="mining"] .layer.spot{-webkit-mask-image:radial-gradient(24% 16% at 80% 32%,#000 55%,transparent 100%);mask-image:radial-gradient(24% 16% at 80% 32%,#000 55%,transparent 100%)}
 @media(prefers-reduced-motion:reduce){.hero-sky{transform:none}}
 
+/* mist band over the join between the hero and "Who we are": the join sits at 57% of its height */
+.cloud-seam{position:relative;z-index:11;height:70vh;margin:-40vh 0 -30vh;pointer-events:none;
+  background:url("../img/cloud-a.webp") 50% 50%/auto 100% repeat-x,url("../img/cloud-b.webp") 20% 52%/auto 95% repeat-x,url("../img/cloud-a.webp") 80% 58%/auto 85% repeat-x;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.35) 22%,#000 46%,#000 68%,transparent 100%);
+  mask-image:linear-gradient(to bottom,transparent 0%,rgba(0,0,0,.35) 22%,#000 46%,#000 68%,transparent 100%)}
+.statement{padding-top:26vh}
+
 /* ---- sector colours, matching the booklets ----
    --sec: the booklet colour (fills, borders) · --sec-text: readable on the dark navy · --sec-on: text on a --sec fill */
 #residential,[data-s="residential"],[data-sec="residential"],[data-sector="residential"]{--sec:#4dc8ed;--sec-text:#4dc8ed;--sec-on:#0b1130}
