@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nuflow | Trenchless Pipe Rehabilitation</title>
 <meta name="description" content="Nuflow trenchless pipe rehabilitation for residential, facility, infrastructure and mining assets. View and download sector booklets, technical data sheets and case studies.">
-<meta name="theme-color" content="#252D64">
+<meta name="theme-color" content="#161B40">
 <link rel="icon" type="image/png" href="../assets/img/nuflow-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/landing.css?v=1">
+<link rel="stylesheet" href="../assets/css/landing.css?v=2">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -39,19 +39,32 @@
 
 <main id="top">
 <section class="hero band-navy" id="hero">
-  <div class="wrap">
-    <div class="hero-copy">
-      <span class="kick">Trenchless pipe rehabilitation</span>
-      <h1>One world of pipes. <span>Every sector covered.</span></h1>
-      <span class="rule" aria-hidden="true"></span>
-      <p class="lede">Choose your sector to see how Nuflow fixes pipes from the inside. No digging, no disruption.</p>
-      <div class="s-cta"><a class="btn-primary" href="#resources">Booklets &amp; data sheets</a><a class="btn-ghost" href="https://nuflow.net/contact/" target="_blank" rel="noopener">Talk to us</a></div>
+  <div class="hero-stage" id="heroStage">
+    <img class="hero-img" id="heroImg" src="../assets/img/hero-tunnel.jpg" alt="A Nuflow technician inspecting a newly relined blue pipe from the inside" fetchpriority="high">
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-rings" id="heroRings" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="hero-copy" id="heroCopy">
+      <div class="wrap">
+        <span class="kick rise" style="--d:1">Trenchless pipe rehabilitation</span>
+        <h1><span class="ln rise" style="--d:2">Pipe rehabilitation</span> <span class="ln rise" style="--d:3">for every sector.</span></h1>
+        <p class="rot-line rise" style="--d:4"><span class="sr-only">For homes, buildings, councils and mines.</span><span class="rot" aria-hidden="true"><span>Homes</span><span>High-rises</span><span>Council networks</span><span>Mine sites</span></span></p>
+        <p class="lede rise" style="--d:5">Nuflow relines pipes from the inside, so there's nothing to dig up.</p>
+        <div class="s-cta rise" style="--d:6"><a class="btn-primary" href="#resources">Booklets &amp; data sheets</a><a class="btn-ghost" href="https://nuflow.net/contact/" target="_blank" rel="noopener">Talk to us</a></div>
+      </div>
     </div>
-    <div class="hero-panels">
-      <a href="#residential" data-sector="residential"><img src="../assets/img/sector-residential.jpg" alt="" fetchpriority="high"><span class="p-label"><span class="p-num">01</span><b>Residential &amp; Strata</b><small>Homes · Body corp<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
-      <a href="#facility" data-sector="facility"><img src="../assets/img/sector-facility.jpg" alt=""><span class="p-label"><span class="p-num">02</span><b>Facility Management</b><small>Commercial<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
-      <a href="#infrastructure" data-sector="infrastructure"><img src="../assets/img/sector-infrastructure.jpg" alt=""><span class="p-label"><span class="p-num">03</span><b>Infrastructure</b><small>Councils · Civil<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
-      <a href="#mining" data-sector="mining"><img src="../assets/img/sector-mining.jpg" alt=""><span class="p-label"><span class="p-num">04</span><b>Mining &amp; Industrial</b><small>Resources<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+    <a class="hero-cue" id="heroCue" href="#sectors">Scroll to explore<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
+    <div class="hero-fade" id="heroFade" aria-hidden="true"></div>
+  </div>
+</section>
+
+<section class="chooser band-navy" id="sectors">
+  <div class="wrap">
+    <span class="kick reveal">Choose your sector</span>
+    <div class="hero-panels reveal">
+      <a href="#residential" data-sector="residential"><img src="../assets/img/sector-residential.jpg" alt="" loading="lazy"><span class="p-label"><span class="p-num">01</span><b>Residential &amp; Strata</b><small>Homes · Body corp<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+      <a href="#facility" data-sector="facility"><img src="../assets/img/sector-facility.jpg" alt="" loading="lazy"><span class="p-label"><span class="p-num">02</span><b>Facility Management</b><small>Commercial<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+      <a href="#infrastructure" data-sector="infrastructure"><img src="../assets/img/sector-infrastructure.jpg" alt="" loading="lazy"><span class="p-label"><span class="p-num">03</span><b>Infrastructure</b><small>Councils · Civil<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+      <a href="#mining" data-sector="mining"><img src="../assets/img/sector-mining.jpg" alt="" loading="lazy"><span class="p-label"><span class="p-num">04</span><b>Mining &amp; Industrial</b><small>Resources<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
     </div>
   </div>
 </section>
@@ -245,6 +258,24 @@
   addEventListener('scroll',()=>{if(!pend){pend=true;requestAnimationFrame(onScroll);}},{passive:true});
   onScroll();
   top.addEventListener('click',()=>{scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});nav.querySelector('.brand').focus({preventScroll:true});});
+
+  /* hero fly-in: browsers with CSS scroll-driven animations run it in landing.css; this is the fallback */
+  let cssScroll=false;try{cssScroll=CSS.supports('animation-timeline: scroll()');}catch(e){}
+  if(!cssScroll&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const img=document.getElementById('heroImg'),copy=document.getElementById('heroCopy'),rings=document.getElementById('heroRings'),
+          cue=document.getElementById('heroCue'),fade=document.getElementById('heroFade');
+    const c01=v=>Math.max(0,Math.min(1,v));
+    let hp=false;
+    function hero(){
+      hp=false;const p=c01(scrollY/innerHeight);
+      img.style.transform='scale('+(1.04+p*0.96).toFixed(3)+')';
+      const q=c01(p/0.45);copy.style.opacity=(1-q).toFixed(3);copy.style.transform='translateY('+(-q*60).toFixed(1)+'px)';
+      rings.style.opacity=(1-c01(p/0.5)).toFixed(3);cue.style.opacity=(1-c01(p/0.2)).toFixed(3);
+      fade.style.opacity=(c01((p-0.55)/0.45)*0.6).toFixed(3);
+    }
+    addEventListener('scroll',()=>{if(!hp){hp=true;requestAnimationFrame(hero);}},{passive:true});
+    addEventListener('resize',hero);hero();
+  }
 
   const els=[...document.querySelectorAll('.reveal')];
   if(!('IntersectionObserver' in window)){els.forEach(e=>e.classList.add('in'));return;}
