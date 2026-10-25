@@ -316,7 +316,7 @@
   });
 
   /* ---- decode the cloud overlays once the page is idle, so the first cloud transition doesn't stall on them ---- */
-  addEventListener('load',()=>{
+  if($('descent')) addEventListener('load',()=>{
     (window.requestIdleCallback||function(f){setTimeout(f,120);})(()=>{
       ['assets/img/cloud-a.webp','assets/img/cloud-b.webp'].forEach(src=>{const im=new Image();im.src=src;if(im.decode)im.decode().catch(()=>{});});
     });

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nuflow | Trenchless Pipe Rehabilitation</title>
+<meta name="description" content="Nuflow trenchless pipe rehabilitation for residential, facility, infrastructure and mining assets. View and download sector booklets, technical data sheets and case studies.">
+<meta name="theme-color" content="#252D64">
+<link rel="icon" type="image/png" href="../assets/img/nuflow-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/landing.css?v=1">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Nuflow, back to top"><img class="brand-logo" src="../assets/img/nuflow-logo.png" alt="Nuflow"></a>
+  <div class="nav-links"><a href="#residential">Residential</a><a href="#facility">Facilities</a><a href="#infrastructure">Infrastructure</a><a href="#mining">Mining</a><div class="nav-drop"><button class="nav-drop-btn" id="bookletBtn" type="button" aria-expanded="false" aria-controls="bookletMenu">Booklets<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button><div class="menu" id="bookletMenu"></div></div><a href="#resources">Resources</a><a href="https://nuflow.net/find-us/" target="_blank" rel="noopener" class="nav-cta">Find a partner</a></div>
+  <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="drawer"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</nav>
+
+<nav class="secbar" id="secbar" aria-label="You are here"><a href="#residential" data-s="residential"><span>01</span>Residential</a><a href="#facility" data-s="facility"><span>02</span>Facilities</a><a href="#infrastructure" data-s="infrastructure"><span>03</span>Infrastructure</a><a href="#mining" data-s="mining"><span>04</span>Mining</a><a href="#resources" data-s="resources"><span>05</span>Resources</a></nav>
+<div class="drawer-scrim" id="drawerScrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true" aria-label="Menu">
+  <div class="drawer-head"><img class="brand-logo" src="../assets/img/nuflow-logo.png" alt="Nuflow"><button class="drawer-close" id="drawerClose" type="button" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <h5>Sectors</h5>
+  <nav class="drawer-links"><a href="#residential">Residential &amp; Strata</a><a href="#facility">Facility Management</a><a href="#infrastructure">Infrastructure</a><a href="#mining">Mining &amp; Industrial</a><a href="#resources">All resources</a></nav>
+  <h5>Sector booklets</h5>
+  <div id="drawerBooklets"></div>
+  <a class="nav-cta" href="https://nuflow.net/find-us/" target="_blank" rel="noopener">Find a partner</a>
+</aside>
+<div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoTitle" aria-hidden="true">
+  <div class="video-box">
+    <div class="video-bar"><b id="videoTitle"></b><div class="doc-actions"><a class="btn-sm ghost" id="videoYT" href="https://www.youtube.com/@NuflowAustralasia" target="_blank" rel="noopener">Open in YouTube</a><button class="btn-sm" id="videoClose" type="button">Close</button></div></div>
+    <div class="video-frame"><iframe id="videoFrame" src="about:blank" title="Nuflow video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>
+  </div>
+</div>
+
+<main id="top">
+<section class="hero band-navy" id="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="kick">Trenchless pipe rehabilitation</span>
+      <h1>One world of pipes. <span>Every sector covered.</span></h1>
+      <span class="rule" aria-hidden="true"></span>
+      <p class="lede">Choose your sector to see how Nuflow fixes pipes from the inside. No digging, no disruption.</p>
+      <div class="s-cta"><a class="btn-primary" href="#resources">Booklets &amp; data sheets</a><a class="btn-ghost" href="https://nuflow.net/contact/" target="_blank" rel="noopener">Talk to us</a></div>
+    </div>
+    <div class="hero-panels">
+      <a href="#residential" data-sector="residential"><img src="../assets/img/sector-residential.jpg" alt="" fetchpriority="high"><span class="p-label"><span class="p-num">01</span><b>Residential &amp; Strata</b><small>Homes · Body corp<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+      <a href="#facility" data-sector="facility"><img src="../assets/img/sector-facility.jpg" alt=""><span class="p-label"><span class="p-num">02</span><b>Facility Management</b><small>Commercial<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+      <a href="#infrastructure" data-sector="infrastructure"><img src="../assets/img/sector-infrastructure.jpg" alt=""><span class="p-label"><span class="p-num">03</span><b>Infrastructure</b><small>Councils · Civil<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+      <a href="#mining" data-sector="mining"><img src="../assets/img/sector-mining.jpg" alt=""><span class="p-label"><span class="p-num">04</span><b>Mining &amp; Industrial</b><small>Resources<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></small></span></a>
+    </div>
+  </div>
+</section>
+
+<section class="who band-light" id="who">
+  <div class="wrap who-grid">
+    <div class="reveal">
+      <span class="kick">Who we are</span>
+      <h2>We fix pipes from the inside, <span>without digging.</span></h2>
+    </div>
+    <div class="reveal">
+      <p>From family homes to mines, councils to high-rises, Nuflow relines, repairs and protects pipe networks in place. Our engineered liner and resin systems cure a structural new pipe inside the old one, with a 50-year design life and minimal disruption during installation. Our trained local network covers 58+ locations across Australia, New Zealand and Asia.</p>
+      <div class="facts"><div><b>50 yr</b><span>Design life</span></div><div><b>58+</b><span>Locations</span></div><div><b>AU · NZ · Asia</b><span>Local network</span></div></div>
+      <div class="s-cta"><a class="btn-primary" href="#residential">Explore the sectors</a><a class="btn-ghost" href="#resources">Booklets, data sheets &amp; case studies</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="sector band-navy" id="residential">
+  <div class="wrap">
+    <div class="sector-top">
+      <div class="sector-media reveal"><img src="../assets/img/sector-residential.jpg" alt="Tree-root damaged pipe relined beneath a suburban home" loading="lazy"></div>
+      <div class="sector-copy">
+        <div class="s-head reveal"><span class="s-num" aria-hidden="true">01</span><span class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span></div>
+        <span class="s-eyebrow reveal">Residential &amp; Strata</span>
+        <h2 class="reveal">Pipes fixed without tearing up the <span class="accent">home</span></h2>
+        <p class="s-intro reveal">When pipes in a home, apartment complex or strata-managed property fail through cracks, leaks, corrosion or tree-root intrusion, the instinct is to replace them, digging through floors, gardens, driveways and walls. Nuflow offers a smarter way. Using existing access points, a resin liner is installed and cured in place to form a seamless new pipe inside the old one: no digging, minimal disruption to residents, and a structural repair backed by a product warranty of up to 50 years.</p>
+      </div>
+    </div>
+    <h3 class="s-subhead reveal">What we rehabilitate</h3>
+    <div class="asset-grid">
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1AJIzciDYqcRiOEYDXn1qql2_ksQuPxXM&amp;sz=w1000" alt="Sewer pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Sewer pipes</h4><p>Seal cracks and joints and block root intrusion from the inside, restoring flow without digging up driveways, gardens or living areas.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1F-q5LPPIegWjkuwPu2co8CsF3bQ2r_Ui&amp;sz=w1000" alt="Stormwater pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Stormwater pipes</h4><p>Repair cracked or leaking stormwater lines to stop pooling, erosion and water ingress, without lifting landscaping or paving.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1r7LTRLvVxhM55keKiYDNU-VQkexj8E07&amp;sz=w1000" alt="Pool pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Pool pipes</h4><p>Seal leaks and restore pressure without touching the pool shell, deck or tiles, no excavation and no draining.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1X7ddw9QASjmvPUG6MfHe6s8ypCygHOPA&amp;sz=w1000" alt="Sewer &amp; stormwater stacks" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Sewer &amp; stormwater stacks</h4><p>Restore vertical drainage stacks in apartment buildings via existing access points, without opening walls or disturbing units.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1iRWBxEygbSsgIvz6GNUX4z_bNHxia-rP&amp;sz=w1000" alt="Drinking water pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Drinking water pipes</h4><p>Reline ageing potable lines with certified, food-grade systems to stop leaks and protect water quality, no demolition.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1CMq72OCeZppV1miveb5iwOZJsW_iH675&amp;sz=w1000" alt="Fire sprinkler systems" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Fire sprinkler systems</h4><p>Restore the internal flow and integrity of fire services without removing ceilings or opening walls, keeping the system compliant.</p></div></div>
+    </div>
+    <div class="s-products reveal"><span class="s-label">Systems used</span><div class="chips"><span class="chip">Blueline</span><span class="chip">Pressureline</span><span class="chip">NuCure</span><span class="chip">Redline</span><span class="chip">Nucoat</span></div></div>
+    <div class="res-sector" data-sector="residential"></div>
+    <div class="s-cta reveal"><a class="btn-primary" href="https://nuflow.net/contact/" target="_blank" rel="noopener">Talk to us about your property</a><a class="btn-ghost" href="https://nuflow.net/find-us/" target="_blank" rel="noopener">Find your local Nuflow team</a></div>
+  </div>
+</section>
+
+<section class="sector band-navy alt" id="facility">
+  <div class="wrap">
+    <div class="sector-top">
+      <div class="sector-media reveal"><img src="../assets/img/sector-facility.jpg" alt="Corroded pipe relined beneath a commercial building" loading="lazy"></div>
+      <div class="sector-copy">
+        <div class="s-head reveal"><span class="s-num" aria-hidden="true">02</span><span class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/></svg></span></div>
+        <span class="s-eyebrow reveal">Facility Management</span>
+        <h2 class="reveal">Keep the building <span class="accent">running</span></h2>
+        <p class="s-intro reveal">For commercial buildings and industrial facilities (high-rises, shopping centres, schools, hospitals, food and power plants), downtime isn't an option. Nuflow's trenchless relining restores ageing or damaged pipework without tearing up floors, walls or outdoor areas, so tenants stay in place and operations keep running. A resin liner cured inside the existing pipe forms a durable new pipe resistant to corrosion, chemicals and pressure variation, completed faster and at lower cost than full replacement.</p>
+      </div>
+    </div>
+    <h3 class="s-subhead reveal">What we rehabilitate</h3>
+    <div class="asset-grid">
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1X7ddw9QASjmvPUG6MfHe6s8ypCygHOPA&amp;sz=w1000" alt="Vertical drain stacks" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Vertical drain stacks</h4><p>Restore corroded or blocked stacks in multi-storey buildings internally, no wall demolition, minimal impact on occupants.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1_dlwjkoKk7GZN4TUcFzUuNYid5x1NzmC&amp;sz=w1000" alt="Sewer pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Sewer pipes</h4><p>Reline against root intrusion, corrosion and misaligned joints to stop blockages and odours without disrupting tenants.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1Sc0Uh__AGuUBL6d_gGs5AmZoLZaQ8Fhz&amp;sz=w1000" alt="Stormwater pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Stormwater pipes</h4><p>Seal cracks and restore flow without cutting through paved areas, gardens or operational zones.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1gRzChA-aXnkcxySoAfk5VBc7H2aaPD7L&amp;sz=w1000" alt="Pits &amp; grease traps" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Pits &amp; grease traps</h4><p>Seal and reinforce pits and traps internally to prevent odours, leaks and failures, no excavation or facility downtime.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1sOqasw5JnncngrJQTA655Rhx_Qw3CJs7&amp;sz=w1000" alt="Potable water pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Potable water pipes</h4><p>Reline ageing water lines with certified systems to stop leaks, lift pressure and protect water quality.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1T6lFmgo7NFf1T4SAfaoUpxchCu-MpXbV&amp;sz=w1000" alt="Fire service pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Fire service pipes</h4><p>Restore the pressure and integrity of fire mains and services without removing ceilings or opening walls.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=19cWK2Abg8SQq5k5EdsQRUIllZ3b-cnOP&amp;sz=w1000" alt="HVAC &amp; cooling pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>HVAC &amp; cooling pipes</h4><p>Protect and reline HVAC and cooling lines in place, extending service life with minimal interruption to operations.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1bUqTPnHwaij5-6ZbNVTvRNxn1QoyEsSJ&amp;sz=w1000" alt="Electrical conduit" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Electrical conduit</h4><p>Internally seal conduit against moisture ingress and corrosion to protect cabling and maintain compliance, without invasive replacement.</p></div></div>
+    </div>
+    <div class="s-products reveal"><span class="s-label">Systems used</span><div class="chips"><span class="chip">Blueline</span><span class="chip">Redline</span><span class="chip">Nucoat</span><span class="chip">NuCure</span><span class="chip">Pressureline</span></div></div>
+    <div class="res-sector" data-sector="facility"></div>
+    <div class="s-cta reveal"><a class="btn-primary" href="https://nuflow.net/contact/" target="_blank" rel="noopener">Talk to us about your building</a><a class="btn-ghost" href="https://nuflow.net/find-us/" target="_blank" rel="noopener">Find your local Nuflow team</a></div>
+  </div>
+</section>
+
+<section class="sector band-navy" id="infrastructure">
+  <div class="wrap">
+    <div class="sector-top">
+      <div class="sector-media reveal"><img src="../assets/img/sector-infrastructure.jpg" alt="Cracked concrete pipe relined beneath a highway" loading="lazy"></div>
+      <div class="sector-copy">
+        <div class="s-head reveal"><span class="s-num" aria-hidden="true">03</span><span class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M2 16c4 0 4-6 10-6s6 6 10 6"/><path d="M2 16v3M22 16v3M12 10V7"/><circle cx="12" cy="6" r="1.4"/></svg></span></div>
+        <span class="s-eyebrow reveal">Infrastructure</span>
+        <h2 class="reveal">Renewing the network <span class="accent">beneath us</span></h2>
+        <p class="s-intro reveal">Cured-in-place pipe (CIPP) relining is a proven, cost-effective method for rehabilitating ageing council and civil assets, particularly sewer, stormwater and water-main networks. A seamless, jointless, corrosion-resistant liner is installed within the existing pipe with minimal excavation, restoring structural integrity and flow while reducing labour, plant and reinstatement costs. For councils, engineers and civil contractors, it extends asset life and limits disruption to roads, services and communities.</p>
+      </div>
+    </div>
+    <h3 class="s-subhead reveal">Assets rehabilitated</h3>
+    <div class="asset-grid">
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1Mzo3305qRFmuclal-EBKkQRGKFAJVyr2&amp;sz=w1000" alt="Sewer mains" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Sewer mains</h4><p>Seal cracks and displaced joints and prevent root entry, restoring flow capacity and extending the life of critical wastewater infrastructure.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1qjOWUK1Qj7VWQAzZkZNU-3J_WHa3thVE&amp;sz=w1000" alt="Stormwater pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Stormwater pipes</h4><p>Restore integrity where corrosion, joint failure or soil erosion risk sinkholes and flooding, without excavating roads or verges.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=15hn6rH-yDDILyiDF4o9gnNQ3qTSH_SLa&amp;sz=w1000" alt="Water mains" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Water mains</h4><p>Install a pressure-rated lining within the existing main to restore strength and flow, prevent leaks and preserve water quality.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1RjFTF_nU4hDVWFeVtezB4VFklXTmq24j&amp;sz=w1000" alt="Rising mains" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Rising mains</h4><p>Reinforce against pressure surges, joint separation and internal wear where ground access is difficult or limited.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1PZxCNEeFC9EyJi3g5lPHhsOIbt5p_dtW&amp;sz=w1000" alt="Manholes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Manholes</h4><p>Seal and reinforce internally against hydrogen-sulphide corrosion and infiltration, creating a gas-tight barrier without demolition.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=199JC1CbJBC6kY06jGWCL7P1CQneXmewd&amp;sz=w1000" alt="External / loaded pipes" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>External / loaded pipes</h4><p>Structurally reline pipes under roads, rail and buildings to carry surface loads and restore shape where excavation is impractical.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1KE_5zGoxkyKpxZtL2dKSUEESqcxWpxxf&amp;sz=w1000" alt="Trade waste" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Trade waste</h4><p>Chemical- and heat-resistant liners restore containment for aggressive industrial effluent and maintain compliance.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1VVv9Tly6WmwhhBspXoSFSN1P_pY2bivE&amp;sz=w1000" alt="Fire mains" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Fire mains</h4><p>Epoxy coatings or structural relining restore flow and pressure integrity to maintain compliance and public safety.</p></div></div>
+    </div>
+    <div class="s-products reveal"><span class="s-label">Systems used</span><div class="chips"><span class="chip">Blueline</span><span class="chip">Sumoline</span><span class="chip">NuCure</span><span class="chip">ASOE Pipe-in Liner</span><span class="chip">NUVLINE GL16</span><span class="chip">Nucoat</span></div></div>
+    <div class="res-sector" data-sector="infrastructure"></div>
+    <div class="s-cta reveal"><a class="btn-primary" href="https://nuflow.net/contact/" target="_blank" rel="noopener">Discuss a project or specification</a><a class="btn-ghost" href="https://nuflow.net/find-us/" target="_blank" rel="noopener">Find your local Nuflow team</a></div>
+  </div>
+</section>
+
+<section class="sector band-navy alt" id="mining">
+  <div class="wrap">
+    <div class="sector-top">
+      <div class="sector-media reveal"><img src="../assets/img/sector-mining.jpg" alt="Worn industrial pipe relined near a processing plant" loading="lazy"></div>
+      <div class="sector-copy">
+        <div class="s-head reveal"><span class="s-num" aria-hidden="true">04</span><span class="s-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20l3-9 5 2 2-5 4 12"/><circle cx="8" cy="6" r="2"/></svg></span></div>
+        <span class="s-eyebrow reveal">Mining &amp; Industrial</span>
+        <h2 class="reveal">Built for the <span class="accent">harshest conditions</span></h2>
+        <p class="s-intro reveal">Mining and industrial pipe networks operate in some of the harshest environments. Abrasive slurries, corrosive chemicals, elevated temperatures, high pressures and constant loading all accelerate failure, and an outage is measured in lost production, environmental risk and safety exposure. Nuflow rehabilitates these assets from the inside using engineered composite liners and specialist resin systems: structural repair or protective lining installed in situ, without excavation, hot works or major shutdowns, so operations continue.</p>
+      </div>
+    </div>
+    <h3 class="s-subhead reveal">Assets rehabilitated</h3>
+    <div class="asset-grid">
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1VhRsk7chyU3-YMr6fqg_84GMsOZh3LCm&amp;sz=w1000" alt="Slurry &amp; tailings pipelines" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Slurry &amp; tailings pipelines</h4><p>Rebuild abrasion- and erosion-worn lines between pits, plants and tailings facilities where wall loss leads to leaks or failure.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1ZvaWx6f5cY18-uhdlFMKbWyIFrIORZj8&amp;sz=w1000" alt="Chemical &amp; reagent lines" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Chemical &amp; reagent lines</h4><p>Reline acid, alkali and reagent lines, often small-bore and running through confined corridors, where failure is high-risk.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1seBgShzVrS2kKWu3PDuw-SEXMMCMjy0P&amp;sz=w1000" alt="Trade waste &amp; effluent" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Trade waste &amp; effluent</h4><p>Chemical- and heat-resistant liners restore aggressive effluent lines beneath slabs and treatment areas with limited access.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1-nBfzH8745IDu4FsGFkJoDj3Lagd-AF0&amp;sz=w1000" alt="Compressed air systems" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Compressed air systems</h4><p>Reline and protect compressed-air lines against internal corrosion and condensate damage, maintaining pressure and reliability.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=14U4Zzn2jUuPfHSSeZU2tUCKxqFS1bshf&amp;sz=w1000" alt="Rising mains" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Rising mains</h4><p>Reinforce pressurised rising mains against surges, joint separation and internal wear where access is limited.</p></div></div>
+      <div class="asset reveal"><div class="asset-img"><img loading="lazy" referrerpolicy="no-referrer" src="https://drive.google.com/thumbnail?id=1X8-9XPnfGYpvgOmb7cJVkV5UQ8cnJRUS&amp;sz=w1000" alt="Cooling &amp; utility lines" onerror="this.closest('.asset').classList.add('noimg')"></div><div class="asset-body"><h4>Cooling &amp; utility lines</h4><p>Protect and reline steel cooling and utility lines in place, extending service life in high-wear plant environments.</p></div></div>
+    </div>
+    <div class="s-products reveal"><span class="s-label">Systems used</span><div class="chips"><span class="chip">Blueline</span><span class="chip">Sumoline</span><span class="chip">ASOE Pipe-in Liner</span><span class="chip">Nucoat</span><span class="chip">Blueline HTAR</span></div></div>
+    <div class="res-sector" data-sector="mining"></div>
+    <div class="s-cta reveal"><a class="btn-primary" href="https://nuflow.net/contact/" target="_blank" rel="noopener">Talk to our engineering team</a><a class="btn-ghost" href="https://nuflow.net/find-us/" target="_blank" rel="noopener">Find your local Nuflow team</a></div>
+  </div>
+</section>
+
+<section class="library band-light" id="resources">
+  <div class="wrap">
+    <span class="kick">Resources</span>
+    <h2>Booklets, data sheets <span>&amp; case studies</span></h2>
+    <p class="lib-lede">View any document online or download it to keep. Filter by sector to see what applies to your assets.</p>
+    <div class="lib-tabs" role="tablist" aria-label="Resource type">
+      <button class="lib-tab" type="button" role="tab" data-tab="booklets" aria-selected="true">Booklets</button>
+      <button class="lib-tab" type="button" role="tab" data-tab="tds" aria-selected="false">Technical data sheets</button>
+      <button class="lib-tab" type="button" role="tab" data-tab="cases" aria-selected="false">Case studies</button>
+      <button class="lib-tab" type="button" role="tab" data-tab="videos" aria-selected="false">Videos</button>
+    </div>
+    <div class="lib-filter"><span>Sector</span>
+      <button class="lib-chip" type="button" data-sec="all" aria-pressed="true">All</button>
+      <button class="lib-chip" type="button" data-sec="residential" aria-pressed="false">Residential</button>
+      <button class="lib-chip" type="button" data-sec="facility" aria-pressed="false">Facilities</button>
+      <button class="lib-chip" type="button" data-sec="infrastructure" aria-pressed="false">Infrastructure</button>
+      <button class="lib-chip" type="button" data-sec="mining" aria-pressed="false">Mining</button>
+    </div>
+    <div id="libBody" role="tabpanel"></div>
+  </div>
+</section>
+
+<section class="reach band-navy" id="reach">
+  <div class="wrap reach-grid">
+    <div class="reveal">
+      <span class="kick">Our reach</span>
+      <h2><b>58+</b>locations</h2>
+      <p>A trained local network across Australia, New Zealand and Asia.</p>
+    </div>
+    <ul class="cities reveal" aria-label="Locations include">
+      <li class="region">Australia</li><li>Brisbane</li><li>Gold Coast</li><li>Sydney</li><li>Newcastle</li><li>Melbourne</li><li>Adelaide</li><li>Perth</li><li>Canberra</li><li>Hobart</li><li>Darwin</li><li>Townsville</li>
+      <li class="region">New Zealand</li><li>Auckland</li><li>Wellington</li><li>Christchurch</li>
+      <li class="region">Asia</li><li>Singapore</li>
+    </ul>
+  </div>
+</section>
+</main>
+
+<footer class="foot band-navy">
+  <div class="wrap">
+    <div class="foot-inner">
+      <div class="foot-brand"><a class="brand" href="#top"><img class="brand-logo" src="../assets/img/nuflow-logo.png" alt="Nuflow"></a>
+        <p>Trenchless pipe rehabilitation through a trained local network of 58+ locations across Australia, New Zealand and Asia. No-dig relining for every asset, every sector.</p></div>
+      <div class="foot-cols">
+        <div class="foot-col"><h4>Sectors</h4><a href="#residential">Residential &amp; Strata</a><a href="#facility">Facility Management</a><a href="#infrastructure">Infrastructure</a><a href="#mining">Mining &amp; Industrial</a></div>
+        <div class="foot-col"><h4>Resources</h4><a href="#resources" data-lib-tab="booklets">Sector booklets</a><a href="#resources" data-lib-tab="tds">Technical data sheets</a><a href="#resources" data-lib-tab="cases">Case studies</a><a href="#resources" data-lib-tab="videos">Videos</a></div>
+        <div class="foot-col"><h4>Company</h4><a href="https://nuflow.net/about-us/" target="_blank" rel="noopener">About</a><a href="https://nuflow.net/products/" target="_blank" rel="noopener">Products</a><a href="https://nuflow.net/find-us/" target="_blank" rel="noopener">Find a partner</a><a href="https://nuflow.net/contact/" target="_blank" rel="noopener">Contact</a></div>
+        <div class="foot-col"><h4>Contact</h4><a href="tel:1800683569">AU 1800 683 569</a><a href="tel:0800168356">NZ 0800 168 356</a><a href="mailto:solutions@nuflow.net">solutions@nuflow.net</a><a href="https://nuflow.net/" target="_blank" rel="noopener">nuflow.net</a></div>
+      </div>
+    </div>
+    <div class="foot-base"><span>© 2026 Nuflow Australasia</span><span>We fix pipes.</span></div>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg></button>
+
+<script src="../assets/js/resources-data.js?v=17"></script>
+<script src="../assets/js/resources.js?v=17"></script>
+<script>
+/* nav shade, back-to-top and scroll reveals. Runs after resources.js so the cards it builds are revealed too. */
+(function(){
+  const nav=document.getElementById('nav'), top=document.getElementById('toTop');
+  let pend=false;
+  function onScroll(){pend=false;const y=scrollY;nav.classList.toggle('scrolled',y>40);top.classList.toggle('show',y>innerHeight*1.2);}
+  addEventListener('scroll',()=>{if(!pend){pend=true;requestAnimationFrame(onScroll);}},{passive:true});
+  onScroll();
+  top.addEventListener('click',()=>{scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});nav.querySelector('.brand').focus({preventScroll:true});});
+
+  const els=[...document.querySelectorAll('.reveal')];
+  if(!('IntersectionObserver' in window)){els.forEach(e=>e.classList.add('in'));return;}
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{rootMargin:'0px 0px -8% 0px'});
+  els.forEach(e=>io.observe(e));
+})();
+</script>
+</body>
+</html>
