@@ -15,7 +15,6 @@ Trade show landing page, reached by QR code. Visitors pick a sector and can view
 | `assets/js/resources-data.js` | **The document list.** Booklets, data sheets, case studies and videos, with the sectors each one appears in |
 | `assets/js/resources.js` | Builds the booklet menu, mobile menu, sector document lists, resource library and video player from the list |
 | `assets/img/` | Hero tunnel photo, sector and logo images |
-| `assets/css/resources.css`, `assets/js/gsap.min.js`, `ScrollTrigger.min.js`, `lenis.min.js`, `assets/img/hero-*.webp`, `cloud-*.webp` | Used only by the previous island design; no longer loaded by the page |
 
 ## Adding or changing a document
 

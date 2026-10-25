@@ -1,19 +1,5 @@
 /* Builds the booklet menu, mobile drawer, per-sector documents, resource library and video player
    from window.NUFLOW_RESOURCES. Runs before the main page script so new .reveal items animate in. */
-/* Phones/tablets with CSS scroll-driven animations: the hero and cloud transition run in CSS on the browser's
-   scroll thread (see html.css-scroll in resources.css), so they move exactly with the finger. The page script
-   checks window.__cssScroll and skips its per-frame style writes. Desktop keeps the JS version. */
-(function(){
-  let on=false;
-  try{
-    on=CSS.supports('animation-timeline: scroll()')
-      && !matchMedia('(prefers-reduced-motion: reduce)').matches
-      && (innerWidth<=1023 || matchMedia('(hover: none)').matches);
-  }catch(e){}
-  window.__cssScroll=on;
-  if(on) document.documentElement.classList.add('css-scroll');
-})();
-
 (function(){
   const R=window.NUFLOW_RESOURCES; if(!R) return;
   const $=id=>document.getElementById(id);
@@ -237,46 +223,6 @@
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVideo();});
   }
 
-  /* ---- phones: sector descent / return to surface. The clouds sweep in and cover the screen, the page jumps
-     once to the target while covered, then the clouds clear. Only opacity and transform change, so the phone's
-     compositor runs it smoothly (the desktop version scrolls the page frame by frame instead). ---- */
-  let mBusy=false;
-  window.__mFlight=function(ty,dir,name){
-    const d=$('descent'); if(!d||mBusy) return; mBusy=true;
-    const lenis=window.__lenis;
-    try{d.querySelector('.d-label .k').textContent=dir>0?'Descending to':'Ascending to';$('dName').textContent=name||'';$('dAlt').textContent='';}catch(e){}
-    d.classList.remove('m-on','m-out','m-up','m-flight');
-    d.classList.toggle('m-up',dir<0);         /* going up: park the clouds above the screen (no transition yet) */
-    void d.offsetWidth;
-    d.classList.add('m-flight');              /* then switch transitions on and start moving */
-    void d.offsetWidth;
-    d.classList.add('m-on');
-    setTimeout(()=>{                          /* screen is covered: one native jump */
-      try{window.scrollTo({top:ty,left:0,behavior:'instant'});}catch(e){scrollTo(0,ty);}
-      try{lenis&&lenis.scrollTo(ty,{immediate:true,force:true});}catch(e){}
-      try{window.ScrollTrigger&&ScrollTrigger.update();}catch(e){}
-    },560);
-    setTimeout(()=>d.classList.add('m-out'),760);
-    setTimeout(()=>{d.classList.remove('m-flight','m-on','m-out','m-up');mBusy=false;},1500);
-  };
-
-  /* ---- hero clouds: a fixed layer that fades out as "Who we are" scrolls up from the bottom of the screen ---- */
-  const sky=$('heroSky'), who=$('who');
-  if(sky&&who){
-    let skyPend=false, lastOp='';
-    function skyFade(){
-      skyPend=false;
-      if(window.__cssScroll) return;          /* CSS scroll timeline fades the clouds instead */
-      const vh=innerHeight, top=who.getBoundingClientRect().top;
-      const t=Math.min(1,Math.max(0,(1.45*vh-top)/(0.95*vh))), e=t*t*(3-2*t);
-      const op=(1-e).toFixed(3);
-      if(op!==lastOp){lastOp=op;sky.style.opacity=op;sky.style.visibility=e>=1?'hidden':'visible';}
-    }
-    addEventListener('scroll',()=>{if(!skyPend){skyPend=true;requestAnimationFrame(skyFade);}},{passive:true});
-    addEventListener('resize',skyFade); addEventListener('load',skyFade);
-    skyFade();
-  }
-
   /* ---- phones/tablets: sticky bar under the menu showing which sector you are in ---- */
   const bar=$('secbar'), nav=$('nav');
   if(bar&&'IntersectionObserver' in window){
@@ -315,15 +261,4 @@
     p.after(btn);
   });
 
-  /* ---- decode the cloud overlays once the page is idle, so the first cloud transition doesn't stall on them ---- */
-  if($('descent')) addEventListener('load',()=>{
-    (window.requestIdleCallback||function(f){setTimeout(f,120);})(()=>{
-      ['assets/img/cloud-a.webp','assets/img/cloud-b.webp'].forEach(src=>{const im=new Image();im.src=src;if(im.decode)im.decode().catch(()=>{});});
-    });
-  },{once:true});
-
-  /* ---- touch devices have no hover: reword the hero hint ---- */
-  if(matchMedia('(hover: none)').matches){
-    const ht=document.querySelector('.hint-txt'); if(ht) ht.textContent='Tap an industry to descend';
-  }
 })();
