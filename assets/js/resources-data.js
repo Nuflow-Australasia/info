@@ -97,5 +97,15 @@ window.NUFLOW_RESOURCES = {
     { system: 'Pressureline', title: 'ASOE Product Installation',                   vimeo: '1039856593', h: 'e997e94ffa', thumb: 'https://i.vimeocdn.com/video/1962315480-6c93ecd90bd57e762908dbfd77f96af068bfa03e39ec6606b71b2369ef760011-d_640', sectors: ['facility', 'infrastructure'] },
     { system: 'NUVLINE',      title: 'DN2000 Impreg UV Installation',               vimeo: '1033658856', h: 'd64b4eca3c', thumb: 'https://i.vimeocdn.com/video/1954821194-d00d9f87de3886a418f627faaff4d93226df405e3dc68e3faefa1caeadd86728-d_640', sectors: ['infrastructure'] },
     { system: 'NUVLINE',      title: 'DN225 Stormwater, Arrow St, Nelson',          vimeo: '1101759690', thumb: 'https://i.vimeocdn.com/video/2037323427-5b3a16e0a6c6f7ee17276d7d340aaaa8fa91d46c1df7c564d55723e5e8fcb486-d_640', sectors: ['infrastructure'] }
-  ]
+  ],
+
+  /* Installation photos shown in each sector's carousel. Files live in assets/img/installs/<sector>/ as WebP;
+     src is relative to the assets folder. A sector with no photos shows no carousel.
+     { src: 'img/installs/residential/sydney-stack-01.webp', title: 'Stack relining', subtitle: 'Sydney', alt: 'What the photo shows' } */
+  installs: {
+    residential:    [],
+    facility:       [],
+    infrastructure: [],
+    mining:         []
+  }
 };
