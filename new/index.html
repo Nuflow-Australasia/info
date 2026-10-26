@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="../assets/img/nuflow-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/landing.css?v=6">
+<link rel="stylesheet" href="../assets/css/landing.css?v=7">
 <link rel="stylesheet" href="../assets/css/circular-carousel.css?v=1">
 <script>document.documentElement.classList.add('js')</script>
 </head>
@@ -31,6 +31,14 @@
   <div id="drawerBooklets"></div>
   <a class="nav-cta" href="https://nuflow.net/find-us/" target="_blank" rel="noopener">Find a partner</a>
 </aside>
+<div class="photo-modal" id="photoModal" role="dialog" aria-modal="true" aria-labelledby="photoTitle" hidden>
+  <div class="photo-box">
+    <figure class="photo-figure"><img id="photoImg" alt=""><figcaption><b id="photoTitle"></b><span id="photoSub"></span><span class="photo-count" id="photoCount"></span></figcaption></figure>
+  </div>
+  <button class="photo-btn photo-prev" id="photoPrev" type="button" aria-label="Previous photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button>
+  <button class="photo-btn photo-next" id="photoNext" type="button" aria-label="Next photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+  <button class="photo-btn photo-close" id="photoClose" type="button" aria-label="Close photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div>
 <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoTitle" aria-hidden="true">
   <div class="video-box">
     <div class="video-bar"><b id="videoTitle"></b><div class="doc-actions"><a class="btn-sm ghost" id="videoYT" href="https://www.youtube.com/@NuflowAustralasia" target="_blank" rel="noopener">Open in YouTube</a><button class="btn-sm" id="videoClose" type="button">Close</button></div></div>
@@ -266,7 +274,7 @@
 
 <script src="../assets/js/resources-data.js?v=21"></script>
 <script src="../assets/js/resources.js?v=19"></script>
-<script src="../assets/js/circular-carousel.js?v=2"></script>
+<script src="../assets/js/circular-carousel.js?v=3"></script>
 <script>
 /* nav shade, back-to-top and scroll reveals. Runs after resources.js so the cards it builds are revealed too. */
 (function(){
@@ -286,13 +294,57 @@
     let hp=false;
     function hero(){
       hp=false;const p=c01(scrollY/innerHeight);
-      img.style.transform='scale('+(1.04+p*0.96).toFixed(3)+')';
+      img.style.transform='translateY('+(p*18).toFixed(2)+'%) scale('+(1.04+p*0.56).toFixed(3)+')';
       const q=c01(p/0.45);copy.style.opacity=(1-q).toFixed(3);copy.style.transform='translateY('+(-q*60).toFixed(1)+'px)';
       rings.style.opacity=(1-c01(p/0.5)).toFixed(3);cue.style.opacity=(1-c01(p/0.2)).toFixed(3);
-      fade.style.opacity=(c01((p-0.55)/0.45)*0.6).toFixed(3);
+      fade.style.opacity=(c01((p-0.4)/0.6)*0.4).toFixed(3);
     }
     addEventListener('scroll',()=>{if(!hp){hp=true;requestAnimationFrame(hero);}},{passive:true});
     addEventListener('resize',hero);hero();
+  }
+
+  /* photo viewer: tap a carousel photo (or press Enter on the carousel) to see it large. The 1800px copy
+     (<name>-lg.webp) loads only when opened. Arrows, swipe and Esc work; focus stays inside until it closes. */
+  const pm=document.getElementById('photoModal'), pmImg=document.getElementById('photoImg'),
+        pmTitle=document.getElementById('photoTitle'), pmSub=document.getElementById('photoSub'), pmCount=document.getElementById('photoCount'),
+        pmPrev=document.getElementById('photoPrev'), pmNext=document.getElementById('photoNext'), pmClose=document.getElementById('photoClose');
+  const pv={list:null,i:0,cc:null,back:null,timer:0,swiped:false,x:0,y:0};
+  function showPhoto(i){
+    const n=pv.list.length; pv.i=(i+n)%n; const p=pv.list[pv.i];
+    pmTitle.textContent=p.title||p.alt; pmSub.textContent=p.subtitle||''; pmCount.textContent=(pv.i+1)+' / '+n;
+    pmImg.classList.add('swap');
+    const img=new Image(); let done=false;
+    const put=src=>{if(done)return;done=true;pmImg.src=src;pmImg.alt=p.alt||p.title||'';requestAnimationFrame(()=>pmImg.classList.remove('swap'));};
+    img.onload=()=>put(p.large); img.onerror=()=>put(p.src); img.src=p.large;
+    [pv.list[(pv.i+1)%n],pv.list[(pv.i-1+n)%n]].forEach(q=>{const pre=new Image();pre.src=q.large;});
+  }
+  function openPhoto(list,i,cc){
+    clearTimeout(pv.timer); pv.list=list; pv.cc=cc; pv.back=document.activeElement;
+    pm.hidden=false; document.documentElement.classList.add('drawer-lock');
+    showPhoto(i); requestAnimationFrame(()=>requestAnimationFrame(()=>pm.classList.add('open')));
+    pmClose.focus({preventScroll:true});
+  }
+  function closePhoto(){
+    if(pm.hidden) return;
+    pm.classList.remove('open'); document.documentElement.classList.remove('drawer-lock');
+    if(pv.cc) pv.cc.focusIndex(pv.i);
+    pv.timer=setTimeout(()=>{pm.hidden=true;pmImg.removeAttribute('src');},190);
+    if(pv.back&&pv.back.focus) pv.back.focus({preventScroll:true});
+  }
+  if(pm){
+    pmPrev.addEventListener('click',()=>showPhoto(pv.i-1));
+    pmNext.addEventListener('click',()=>showPhoto(pv.i+1));
+    pmClose.addEventListener('click',closePhoto);
+    pm.addEventListener('click',e=>{if(pv.swiped){pv.swiped=false;return;}if(e.target===pm||e.target.classList.contains('photo-box'))closePhoto();});
+    pm.addEventListener('pointerdown',e=>{pv.x=e.clientX;pv.y=e.clientY;pv.swiped=false;});
+    pm.addEventListener('pointerup',e=>{const dx=e.clientX-pv.x,dy=e.clientY-pv.y;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.2){pv.swiped=true;showPhoto(pv.i+(dx<0?1:-1));}});
+    document.addEventListener('keydown',e=>{
+      if(pm.hidden) return;
+      if(e.key==='Escape'){e.preventDefault();closePhoto();}
+      else if(e.key==='ArrowRight'){e.preventDefault();showPhoto(pv.i+1);}
+      else if(e.key==='ArrowLeft'){e.preventDefault();showPhoto(pv.i-1);}
+      else if(e.key==='Tab'){const f=[pmPrev,pmNext,pmClose],k=f.indexOf(document.activeElement);e.preventDefault();f[(k+(e.shiftKey?-1:1)+f.length)%f.length].focus();}
+    });
   }
 
   /* installation photo carousels (React Bits circular carousel, vanilla port). Only sectors with photos get one, and
@@ -311,10 +363,11 @@
     const section=box.closest('.sector');
     const name=(R.sectors&&R.sectors[sec])||sec;
     const ring=box.querySelector('.installs-ring');
-    const build=()=>{ring.toggleAttribute('data-clipped',ccFit(list.length)<180);rings.push({n:list.length,cc:new CircularCarousel(ring,
-      list.map(p=>({src:new URL(p.src,assetsBase).href,alt:p.alt||p.title||'',title:p.title||'',subtitle:p.subtitle||''})),
+    const photos=list.map(p=>({src:new URL(p.src,assetsBase).href,large:new URL(p.src.replace(/\.webp$/,'-lg.webp'),assetsBase).href,alt:p.alt||p.title||'',title:p.title||'',subtitle:p.subtitle||''}));
+    const build=()=>{ring.toggleAttribute('data-clipped',ccFit(list.length)<180);let cc;cc=new CircularCarousel(ring,photos,
       {preset:'cylinder',intro:'rise',cardWidth:ccWidth(),aspectRatio:4/3,gap:24,autoplay:'drift',speed:10,captions:true,cornerRadius:0,
-       fitAngle:ccFit(list.length),fadeColor:section&&section.classList.contains('alt')?'#1C2251':'#161B40',label:name+': installation photos'})});};
+       fitAngle:ccFit(list.length),fadeColor:section&&section.classList.contains('alt')?'#1C2251':'#161B40',label:name+': installation photos. Select a photo to enlarge it',
+       onItemClick:(item,index)=>openPhoto(photos,index,cc)});rings.push({n:list.length,cc});};
     if(!('IntersectionObserver' in window)){build();return;}
     const near=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){near.disconnect();build();}},{rootMargin:'900px 0px'});
     near.observe(box);
@@ -351,15 +404,18 @@
     document.querySelectorAll('.chapter').forEach(ch=>{
       const img=ch.querySelector('.chapter-img'), title=ch.querySelector('.chapter-title');
       scenes.push({el:ch,run:(r,vh)=>{
-        const p=c01((vh-r.top)/r.height);
-        img.style.transform='scale('+(1.18-p*0.18).toFixed(3)+')';
-        const q=c01((vh*0.45-r.top)/(vh*0.45+(r.height-vh)*0.22));
+        /* cover progress: 0 as the chapter's top enters the bottom of the screen, 1 as its bottom leaves the top */
+        const p=c01((vh-r.top)/(vh+r.height)), phone=innerWidth<=860;
+        const [y0,s0,y1,s1]=phone?[-13,1.6,13,1.3]:[-9,1.4,9,1.18];
+        img.style.transform='translateY('+(y0+(y1-y0)*p).toFixed(2)+'%) scale('+(s0+(s1-s0)*p).toFixed(3)+')';
+        const t0=vh-0.3*Math.min(r.height,vh), t1=vh-0.45*(vh+r.height);
+        const q=c01((t0-r.top)/(t0-t1));
         title.style.opacity=q.toFixed(3);title.style.transform='translateY('+((1-q)*56).toFixed(1)+'px)';
       }});
     });
     const reachScene=document.getElementById('reachScene'),day=document.getElementById('reachDay'),earth=document.getElementById('reachEarth');
     if(reachScene) scenes.push({el:reachScene,run:(r,vh)=>{
-      const hold=r.height-vh, p=hold>0?c01(-r.top/hold):0, d=c01((p-0.08)/0.7);
+      const p=c01((vh-r.top)/(vh+r.height)), d=c01((p-0.2)/0.4);
       const pos=(d*100).toFixed(1)+'% 0';day.style.webkitMaskPosition=pos;day.style.maskPosition=pos;
       earth.style.transform='scale('+(1.12-p*0.12).toFixed(3)+')';
     }});

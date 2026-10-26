@@ -209,6 +209,7 @@
   CircularCarousel.prototype.setActive = function (index, force) {
     if (index === this.active && !force) return;
     this.active = index;
+    this.markActive();
     const item = this.items[index] || this.items[0];
     if (!item) return;
     const label = item.title || item.alt || 'Image ' + (index + 1);
@@ -228,6 +229,11 @@
       });
     }
     if (!force && typeof this.opts.onChange === 'function') this.opts.onChange(index);
+  };
+
+  /* the front card carries data-active, so the page can style it (a zoom cursor on this site) */
+  CircularCarousel.prototype.markActive = function () {
+    (this.cards || []).forEach((card, i) => card.toggleAttribute('data-active', i === this.active));
   };
 
   CircularCarousel.prototype.preload = function () {
@@ -429,6 +435,7 @@
     this.root.toggleAttribute('data-clipped', this.opts.fitAngle < 180);
     this.s = this.settings();
     this.buildCards();
+    this.markActive();
     this.measure();
     this.render(this.s, performance.now());
     this.wake();

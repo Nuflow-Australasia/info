@@ -126,11 +126,11 @@ h1,h2,h3,h4{font-family:var(--font);line-height:1.05}
 html.drawer-lock{overflow:hidden}
 
 /* ================= HERO: fly into the relined pipe =================
-   A 200svh scroll zone holds a sticky full-screen stage. While the first screen of scroll passes, the photo
-   pushes into the tunnel, the copy lifts away and the stage fades to the page colour. Browsers with CSS
-   scroll-driven animations run it on the scroll thread; the page script covers the rest. */
-.hero{position:relative;height:200vh;height:200svh;background:var(--bg)}
-.hero-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#0b0e24}
+   A full-screen stage that scrolls away at normal speed (nothing pins). As it leaves, the photo pushes into
+   the tunnel and drifts down so it seems to move slower than the page, and the copy lifts away. Browsers
+   with CSS scroll-driven animations run it on the scroll thread; the page script covers the rest. */
+.hero{position:relative;height:100vh;height:100svh;background:var(--bg)}
+.hero-stage{position:relative;height:100%;overflow:hidden;background:#0b0e24}
 .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:52% 40%;transform-origin:52% 37%;transform:scale(1.04);will-change:transform}
 .hero-shade{position:absolute;inset:0;pointer-events:none;background:
   linear-gradient(180deg,rgba(16,20,47,.7) 0%,rgba(16,20,47,0) 22%),
@@ -172,12 +172,12 @@ html.drawer-lock{overflow:hidden}
   .hero-copy{animation:heroLift linear both;animation-timeline:scroll(root);animation-range:0 45svh}
   .hero-rings{animation:heroOut linear both;animation-timeline:scroll(root);animation-range:0 50svh}
   .hero-cue{animation:heroOut linear both;animation-timeline:scroll(root);animation-range:0 20svh}
-  .hero-fade{animation:heroIn linear both;animation-timeline:scroll(root);animation-range:55svh 100svh}
+  .hero-fade{animation:heroIn linear both;animation-timeline:scroll(root);animation-range:40svh 100svh}
 }
-@keyframes heroPush{from{transform:scale(1.04)}to{transform:scale(2)}}
+@keyframes heroPush{from{transform:translateY(0) scale(1.04)}to{transform:translateY(18%) scale(1.6)}}
 @keyframes heroLift{to{opacity:0;transform:translateY(-60px)}}
 @keyframes heroOut{to{opacity:0}}
-@keyframes heroIn{to{opacity:.6}}
+@keyframes heroIn{to{opacity:.4}}
 
 @media(max-width:860px){
   .hero-copy{bottom:76px}
@@ -224,14 +224,15 @@ html.drawer-lock{overflow:hidden}
 @media(max-width:860px){.who{padding:80px 0}.who-grid{gap:24px}.who-body{grid-template-columns:1fr;gap:32px}}
 
 /* ================= SECTORS =================
-   Each sector opens with a full-screen chapter: the photo holds on screen and settles while its name rises in,
-   then the intro, quick links and content scroll up beneath it. Photos keep the sector-*.jpg filenames;
+   Each sector opens with a full-screen chapter that scrolls at normal speed (nothing pins). While it passes
+   through the screen its photo zooms out and drifts (more on phones, where the screen is narrow), and the
+   sector name rises in; then the intro, quick links and content follow. Photos keep the sector-*.jpg filenames;
    --focus on the chapter sets their focal point. */
 .sector{--sbg:var(--bg);position:relative;padding:0 0 120px;background:var(--sbg)}
 .sector.alt{--sbg:var(--bg-alt)}
-.chapter{position:relative;height:160vh;height:160svh;view-timeline:--chapter block}
-.chapter-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--bg-deep)}
-.chapter-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--focus,50% 60%);transform:scale(1.12);transform-origin:var(--focus,50% 60%);will-change:transform}
+.chapter{position:relative;height:100vh;height:100svh;view-timeline:--chapter block}
+.chapter-stage{position:relative;height:100%;overflow:hidden;background:var(--bg-deep)}
+.chapter-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:var(--focus,50% 60%);transform:scale(1.2);transform-origin:var(--focus,50% 60%);will-change:transform}
 .chapter-shade{position:absolute;inset:0;pointer-events:none;background:
   linear-gradient(180deg,rgba(16,20,47,.55) 0%,rgba(16,20,47,0) 18%),
   linear-gradient(90deg,rgba(16,20,47,.82) 0%,rgba(16,20,47,.35) 45%,rgba(16,20,47,0) 70%),
@@ -242,10 +243,12 @@ html.drawer-lock{overflow:hidden}
 .chapter-line{margin-top:22px;max-width:22em;font:700 clamp(1.2rem,2.2vw,1.75rem)/1.25 var(--font);color:rgba(255,255,255,.94)}
 .chapter-line::before{content:"";display:block;width:72px;height:6px;background:var(--sec);margin-bottom:20px}
 @supports (animation-timeline: view()){
-  .chapter-img{animation:chapterSettle linear both;animation-timeline:--chapter;animation-range:entry 0% contain 100%}
-  .chapter-title{animation:chapterRise linear both;animation-timeline:--chapter;animation-range:entry 55% contain 22%}
+  .chapter-img{animation:chapterSettle linear both;animation-timeline:--chapter;animation-range:cover 0% cover 100%}
+  .chapter-title{animation:chapterRise linear both;animation-timeline:--chapter;animation-range:entry 30% cover 45%}
 }
-@keyframes chapterSettle{from{transform:scale(1.18)}to{transform:scale(1)}}
+/* the scale always stays larger than the drift, so the photo never shows an edge */
+@keyframes chapterSettle{from{transform:translateY(-9%) scale(1.4)}to{transform:translateY(9%) scale(1.18)}}
+@keyframes chapterSettlePhone{from{transform:translateY(-13%) scale(1.6)}to{transform:translateY(13%) scale(1.3)}}
 @keyframes chapterRise{from{opacity:0;transform:translateY(56px)}to{opacity:1;transform:none}}
 
 .sector>.wrap{padding-top:64px}
@@ -264,7 +267,8 @@ html.drawer-lock{overflow:hidden}
 .s-subhead::before{content:"";width:28px;height:4px;background:var(--sec)}
 .s-count{display:inline-grid;place-items:center;min-width:26px;height:24px;padding:0 7px;background:var(--sec,var(--green));color:var(--sec-on,var(--navy));font:800 var(--fs-meta) var(--font);font-variant-numeric:tabular-nums}
 @media(max-width:860px){
-  .chapter{height:140vh;height:140svh}
+  .chapter{height:88vh;height:88svh}
+  .chapter-img{animation-name:chapterSettlePhone}
   .chapter h2{font-size:clamp(2.2rem,10vw,3.4rem)}
   .chapter-title{bottom:56px}
   .chapter-line{margin-top:16px}
@@ -301,6 +305,36 @@ html.drawer-lock{overflow:hidden}
 .installs-ring .circular-carousel__count{font:600 var(--fs-meta) var(--font);font-variant-numeric:tabular-nums}
 .installs .installs-ring[data-clipped] .circular-carousel__view{-webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent)}
 @media(max-width:860px){.installs .installs-ring{height:320px}}
+
+/* ---- photo viewer: a carousel photo shown large (opened from the installation carousels) ---- */
+.installs .circular-carousel__card[data-active] .circular-carousel__tile{cursor:zoom-in}
+.photo-modal{position:fixed;inset:0;z-index:420;background:rgba(16,20,47,.95);opacity:0;transition:opacity 180ms ease}
+.photo-modal[hidden]{display:none}
+.photo-modal.open{opacity:1;transition:opacity 240ms var(--ease-out)}
+.photo-box{position:absolute;inset:0;display:grid;place-items:center;padding:64px 88px 40px}
+.photo-figure{margin:0;display:flex;flex-direction:column;align-items:center;transform:scale(.97);transition:transform 180ms ease}
+.photo-modal.open .photo-figure{transform:none;transition:transform 240ms var(--ease-out)}
+.photo-figure img{display:block;max-width:min(100%,1600px);max-height:76vh;max-height:76svh;width:auto;height:auto;object-fit:contain;background:var(--bg-deep);transition:opacity 200ms ease}
+.photo-figure img.swap{opacity:0}
+.photo-figure figcaption{margin-top:18px;display:flex;flex-direction:column;align-items:center;gap:2px;text-align:center;color:#fff}
+.photo-figure figcaption b{font:700 var(--fs-lead)/1.3 var(--font)}
+.photo-figure figcaption span{font:500 var(--fs-small) var(--font);color:rgba(255,255,255,.75)}
+.photo-figure .photo-count{margin-top:4px;font:600 var(--fs-meta) var(--font);font-variant-numeric:tabular-nums;color:rgba(255,255,255,.62)}
+.photo-btn{position:absolute;z-index:2;width:52px;height:52px;display:grid;place-items:center;background:rgba(255,255,255,.1);color:#fff;border:0;cursor:pointer;transition:transform 160ms var(--ease-out),background-color 200ms ease}
+.photo-btn svg{width:22px;height:22px}
+.photo-btn:active{transform:scale(.97)}
+.photo-close{top:16px;right:16px}
+.photo-prev{left:20px;top:50%;margin-top:-26px}
+.photo-next{right:20px;top:50%;margin-top:-26px}
+@media(hover:hover) and (pointer:fine){.photo-btn:hover{background:var(--green);color:var(--navy)}}
+@media(max-width:860px){
+  .photo-box{padding:64px 12px 96px}
+  .photo-figure img{max-height:64vh;max-height:64svh}
+  .photo-prev,.photo-next{top:auto;bottom:20px;margin-top:0}
+  .photo-prev{left:16px}.photo-next{right:16px}
+  .photo-figure figcaption{padding:0 56px}
+}
+@media(prefers-reduced-motion:reduce){.photo-figure,.photo-modal.open .photo-figure{transform:none;transition:none}}
 
 /* ---- per-sector documents (built by resources.js) ---- */
 .res-sector{margin-top:8px}
@@ -365,12 +399,12 @@ button.case-img:active .play{transform:translate(-50%,-50%) scale(.94)}
 @media(max-width:860px){.library{padding:80px 0}}
 
 /* ================= REACH: dawn over Australasia =================
-   The globe is held on screen for a screen and a bit of scroll while daylight sweeps west across it,
-   from the sunrise on the right to the lit cities on the left. A soft-edged mask on the day picture
+   As the globe scrolls up into view (nothing pins), daylight sweeps west across it, from the sunrise on
+   the right to the lit cities on the left, finishing just after the block fills the screen. A soft-edged mask on the day picture
    is the line between night and day. */
 .reach{background:var(--bg)}
-.reach-scene{position:relative;height:230vh;height:230svh;view-timeline:--reach block}
-.reach-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#03050d}
+.reach-scene{position:relative;height:100vh;height:100svh;view-timeline:--reach block}
+.reach-stage{position:relative;height:100%;overflow:hidden;background:#03050d}
 .reach-earth{position:absolute;inset:0;transform:scale(1.12);transform-origin:46% 62%;will-change:transform}
 .reach-earth img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 60%}
 .reach-day{-webkit-mask-image:linear-gradient(100deg,transparent 0 42%,#000 58% 100%);mask-image:linear-gradient(100deg,transparent 0 42%,#000 58% 100%);-webkit-mask-size:300% 100%;mask-size:300% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:0% 0;mask-position:0% 0}
@@ -382,8 +416,8 @@ button.case-img:active .play{transform:translate(-50%,-50%) scale(.94)}
 .reach-copy p{margin-top:16px;max-width:520px;font-size:var(--fs-lead);line-height:1.6;color:rgba(255,255,255,.9)}
 .reach-copy .s-cta{margin-top:28px}
 @supports (animation-timeline: view()){
-  .reach-day{animation:dawn linear both;animation-timeline:--reach;animation-range:contain 8% contain 78%}
-  .reach-earth{animation:reachDrift linear both;animation-timeline:--reach;animation-range:contain 0% contain 100%}
+  .reach-day{animation:dawn linear both;animation-timeline:--reach;animation-range:cover 20% cover 60%}
+  .reach-earth{animation:reachDrift linear both;animation-timeline:--reach;animation-range:cover 0% cover 100%}
 }
 @keyframes dawn{from{-webkit-mask-position:0% 0;mask-position:0% 0}to{-webkit-mask-position:100% 0;mask-position:100% 0}}
 @keyframes reachDrift{from{transform:scale(1.12)}to{transform:scale(1)}}
@@ -469,12 +503,10 @@ button.case-img:active .play{transform:translate(-50%,-50%) scale(.94)}
   .hero-img,.hero-copy,.hero-rings,.hero-cue,.hero-fade,.rise,.hero-cue svg{animation:none!important}
   .hero-rings{display:none}
   .rot span{animation:none}.rot span:first-child{opacity:1}
-  .chapter{height:auto}
-  .chapter-stage{position:relative;height:80vh;height:80svh}
+  .chapter{height:80vh;height:80svh}
   .chapter-img{transform:none;animation:none}
   .chapter-title{animation:none}
-  .reach-scene{height:auto}
-  .reach-stage{position:relative;height:90vh;height:90svh}
+  .reach-scene{height:90vh;height:90svh}
   .reach-earth{transform:none;animation:none}
   .reach-day{animation:none;-webkit-mask-image:none;mask-image:none}
 }

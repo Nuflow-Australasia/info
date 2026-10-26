@@ -34,6 +34,7 @@ Each sector shows a 3D carousel of installation photos (a vanilla port of the Re
 
 - **Originals:** drop full-size photos into `assets/img/Installs/<Residential|Facilities|Infrastructure|Industrial>/`, named `System - What it shows` (for example `Blueline - Pouring epoxy into liner.jpg`). Git ignores this folder, so the originals are never published.
 - **Website copies:** each photo is resized to about 1000 px WebP (around 100 KB) in `assets/img/gallery/<sector>/` and listed under `installs` in `assets/js/resources-data.js` with a title, subtitle (the system) and alt text. Ask Claude to "add the new installation photos" and it will do this.
+- Each photo also has an 1800 px copy, `<name>-lg.webp`, next to it. It loads only when someone taps the photo to see it large.
 - Bump the `?v=` number on `resources-data.js` in both `index.html` and `new/index.html`.
 
 The "What we rehabilitate" card images live in `assets/img/assets/` (transparent WebP, plus a small `-glow` copy used for the blurred background).
