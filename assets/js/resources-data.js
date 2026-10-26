@@ -125,7 +125,7 @@ window.NUFLOW_RESOURCES = {
       { src: 'img/gallery/facility/blueline-before-displacement.webp', title: 'Before: displacement of the host pipe', subtitle: 'Blueline', alt: 'CCTV view of a host pipe with a displaced joint' },
       { src: 'img/gallery/facility/blueline-after-displacement-sealed.webp', title: 'After: displacement sealed over', subtitle: 'Blueline', alt: 'CCTV view of the same pipe relined, with the displacement sealed over' },
       { src: 'img/gallery/facility/pressureline-liner-folding.webp', title: 'Folding the liner for install', subtitle: 'Pressureline', alt: 'Installers in hi-vis folding a blue Pressureline liner on site' },
-      { src: 'img/gallery/facility/pressureline-liner-inversion.webp', title: 'Liner inversion', subtitle: 'Pressureline', alt: 'Installer guiding a long blue liner laid along a courtyard during inversion' },
+      { src: 'img/gallery/facility/pressureline-liner-inversion.webp', title: 'Inversion of poly bag', subtitle: 'Pressureline', alt: 'Installer guiding a long blue liner laid along a courtyard during inversion of the poly bag' },
       { src: 'img/gallery/facility/pressureline-rising-main-flanges.webp', title: 'Relined rising main flange ends', subtitle: 'Pressureline', alt: 'Two flanged rising main pipe ends relined in blue' },
       { src: 'img/gallery/facility/nucoat-htar-chamber-dairy.webp', title: 'HTAR-coated chamber at a dairy facility', subtitle: 'Nucoat', alt: 'Concrete chamber at a dairy facility coated in magenta Nucoat' },
       { src: 'img/gallery/facility/redline-before-after.webp', title: 'Before and after', subtitle: 'Redline', alt: 'Corroded copper pipe beside a copper pipe lined with red epoxy' },
