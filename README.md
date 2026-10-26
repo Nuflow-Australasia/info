@@ -27,3 +27,11 @@ Trade show landing page, reached by QR code. Visitors pick a sector and can view
 4. In `index.html`, bump the `?v=` number on the `resources-data.js` link so phones load the new list, then commit and push.
 
 Videos use the YouTube video ID (the part after `watch?v=`).
+
+## Replacing a sector photo
+
+Each sector opens with a full-screen photo, also used on the "Choose your sector" panels. To replace one, save the new photo over `assets/img/sector-residential.jpg`, `sector-facility.jpg`, `sector-infrastructure.jpg` or `sector-mining.jpg`, keeping the name.
+
+- Landscape, at least 2400 × 1350 px, JPG under about 500 KB.
+- Keep the subject towards the right and the lower left fairly plain or dark: the sector name sits there.
+- If the crop is off, change that sector's `--focus` value in `index.html` (for example `style="--focus:60% 70%"`; first number is left to right, second top to bottom).
