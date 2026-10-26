@@ -299,6 +299,7 @@ html.drawer-lock{overflow:hidden}
 .installs .installs-ring{height:520px;margin:0 calc(-1 * var(--gut));width:auto;color:#fff}
 .installs-ring .circular-carousel__title{font:700 var(--fs-body)/1.35 var(--font)}
 .installs-ring .circular-carousel__count{font:600 var(--fs-meta) var(--font);font-variant-numeric:tabular-nums}
+.installs .installs-ring[data-clipped] .circular-carousel__view{-webkit-mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(to right,transparent,#000 9%,#000 91%,transparent)}
 @media(max-width:860px){.installs .installs-ring{height:320px}}
 
 /* ---- per-sector documents (built by resources.js) ---- */

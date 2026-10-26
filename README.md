@@ -30,11 +30,10 @@ Videos use the YouTube video ID (the part after `watch?v=`).
 
 ## Adding installation photos
 
-Each sector can show a 3D carousel of installation photos (a vanilla port of the React Bits circular carousel: `assets/js/circular-carousel.js`, `assets/css/circular-carousel.css`). It only appears once that sector has photos.
+Each sector shows a 3D carousel of installation photos (a vanilla port of the React Bits circular carousel: `assets/js/circular-carousel.js`, `assets/css/circular-carousel.css`). A carousel only appears once its sector has photos, and each one loads as it comes into view.
 
-- Photos live in `assets/img/installs/<sector>/` (`residential`, `facility`, `infrastructure`, `mining`) as WebP, about 1600 px on the long side and around 200 KB each.
-- List each one under `installs` in `assets/js/resources-data.js` with its path (relative to `assets/`), a short title, a subtitle such as the location, and alt text describing what the photo shows.
-- 6 to 10 photos per sector works best; landscape photos suit the 4:3 cards.
+- **Originals:** drop full-size photos into `assets/img/Installs/<Residential|Facilities|Infrastructure|Industrial>/`, named `System - What it shows` (for example `Blueline - Pouring epoxy into liner.jpg`). Git ignores this folder, so the originals are never published.
+- **Website copies:** each photo is resized to about 1000 px WebP (around 100 KB) in `assets/img/gallery/<sector>/` and listed under `installs` in `assets/js/resources-data.js` with a title, subtitle (the system) and alt text. Ask Claude to "add the new installation photos" and it will do this.
 - Bump the `?v=` number on `resources-data.js` in both `index.html` and `new/index.html`.
 
 The "What we rehabilitate" card images live in `assets/img/assets/` (transparent WebP, plus a small `-glow` copy used for the blurred background).

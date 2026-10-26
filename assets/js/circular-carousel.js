@@ -8,7 +8,10 @@
      items:   [{ src, alt, title, subtitle }]
      options: the original's props (preset, intro, cardWidth, aspectRatio, gap, autoplay, speed, direction,
               draggable, momentum, snap, pauseOnHover, focusOnClick, parallax, stretch, depthFade, fadeColor,
-              innerShade, cornerRadius, captions, label). setCardWidth(px) re-lays it out for a new screen size. */
+              innerShade, cornerRadius, captions, label). setCardWidth(px, fitAngle) re-lays it out for a new screen size.
+     fitAngle (added in this port, default 180): how much of the ring, in degrees either side of the front, is fitted
+     to the box. Below 180 the ring is drawn larger and its sides run past the edges, which keeps cards readable
+     when there are many photos. */
 (function(){
   const PRESETS = {
     cylinder: { axis: 'y', tilt: -5, perspective: 2500, curve: 1, spread: 1, inward: false, billboard: false, backfaces: true, window: 0 },
@@ -38,7 +41,7 @@
     preset: 'cylinder', intro: 'rise', cardWidth: 220, aspectRatio: 1, gap: 25, curve: undefined, tilt: undefined,
     perspective: undefined, autoplay: 'drift', speed: 14, interval: 3, direction: 'left', draggable: true, momentum: 0.6,
     snap: true, pauseOnHover: true, focusOnClick: true, parallax: 0.3, stretch: 0.5, depthFade: 0.55, fadeColor: '#000000',
-    innerShade: 0.6, cornerRadius: 12, captions: false, label: 'Image carousel', onChange: null, onItemClick: null
+    innerShade: 0.6, cornerRadius: 12, captions: false, label: 'Image carousel', fitAngle: 180, onChange: null, onItemClick: null
   };
 
   function CircularCarousel(root, items, options) {
@@ -92,6 +95,7 @@
       stretch: reduced ? 0 : clamp(o.stretch, 0, 1),
       depthFade: clamp(o.depthFade, 0, 1),
       captions: o.captions,
+      fitAngle: clamp(o.fitAngle || 180, 5, 180),
       reduced
     };
   };
@@ -259,7 +263,7 @@
       minX = -width / 2; maxX = width / 2; minY = -s.cardH / 2; maxY = s.cardH / 2;
     } else {
       const corners = [[-s.cardW / 2, -s.cardH / 2], [s.cardW / 2, -s.cardH / 2], [-s.cardW / 2, s.cardH / 2], [s.cardW / 2, s.cardH / 2]];
-      const limit = s.layout.window ? s.layout.window * s.step : 180;
+      const limit = s.layout.window ? s.layout.window * s.step : s.fitAngle;
       for (let a = -limit; a <= limit; a += limit / 24) {
         for (const [cx, cy] of corners) {
           let p;
@@ -418,9 +422,11 @@
   };
 
   /* lay the ring out again for a new card size (the page calls this when the screen width changes) */
-  CircularCarousel.prototype.setCardWidth = function (width) {
-    if (width === this.opts.cardWidth) return;
+  CircularCarousel.prototype.setCardWidth = function (width, fitAngle) {
+    if (width === this.opts.cardWidth && (fitAngle == null || fitAngle === this.opts.fitAngle)) return;
     this.opts.cardWidth = width;
+    if (fitAngle != null) this.opts.fitAngle = fitAngle;
+    this.root.toggleAttribute('data-clipped', this.opts.fitAngle < 180);
     this.s = this.settings();
     this.buildCards();
     this.measure();

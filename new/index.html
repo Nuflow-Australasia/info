@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="../assets/img/nuflow-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/landing.css?v=5">
+<link rel="stylesheet" href="../assets/css/landing.css?v=6">
 <link rel="stylesheet" href="../assets/css/circular-carousel.css?v=1">
 <script>document.documentElement.classList.add('js')</script>
 </head>
@@ -264,9 +264,9 @@
 
 <button class="to-top" id="toTop" type="button" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg></button>
 
-<script src="../assets/js/resources-data.js?v=19"></script>
+<script src="../assets/js/resources-data.js?v=20"></script>
 <script src="../assets/js/resources.js?v=19"></script>
-<script src="../assets/js/circular-carousel.js?v=1"></script>
+<script src="../assets/js/circular-carousel.js?v=2"></script>
 <script>
 /* nav shade, back-to-top and scroll reveals. Runs after resources.js so the cards it builds are revealed too. */
 (function(){
@@ -295,11 +295,14 @@
     addEventListener('resize',hero);hero();
   }
 
-  /* installation photo carousels (React Bits circular carousel, vanilla port). Only sectors with photos get one. */
+  /* installation photo carousels (React Bits circular carousel, vanilla port). Only sectors with photos get one, and
+     each ring is built as it comes within a screen or so of view, so phones don't download every photo on load. */
   const R=window.NUFLOW_RESOURCES||{}, installs=R.installs||{};
   const dataScript=document.querySelector('script[src*="resources-data.js"]');
   const assetsBase=dataScript?new URL('../',dataScript.src):new URL('assets/',location.href);
   const ccWidth=()=>innerWidth<=560?210:innerWidth<=960?260:340;
+  /* on a phone the front card fills most of the width with its neighbours peeking in; wider screens show about four */
+  const ccFit=n=>Math.max(8,Math.min(180,Math.round(180/n*(innerWidth<=560?1.6:4))));
   const rings=[];
   document.querySelectorAll('.installs[data-sector]').forEach(box=>{
     const sec=box.dataset.sector, list=(installs[sec]||[]).filter(p=>p&&p.src);
@@ -307,12 +310,16 @@
     box.hidden=false;
     const section=box.closest('.sector');
     const name=(R.sectors&&R.sectors[sec])||sec;
-    rings.push(new CircularCarousel(box.querySelector('.installs-ring'),
+    const ring=box.querySelector('.installs-ring');
+    const build=()=>{ring.toggleAttribute('data-clipped',ccFit(list.length)<180);rings.push({n:list.length,cc:new CircularCarousel(ring,
       list.map(p=>({src:new URL(p.src,assetsBase).href,alt:p.alt||p.title||'',title:p.title||'',subtitle:p.subtitle||''})),
       {preset:'cylinder',intro:'rise',cardWidth:ccWidth(),aspectRatio:4/3,gap:24,autoplay:'drift',speed:10,captions:true,cornerRadius:0,
-       fadeColor:section&&section.classList.contains('alt')?'#1C2251':'#161B40',label:name+': installation photos'}));
+       fitAngle:ccFit(list.length),fadeColor:section&&section.classList.contains('alt')?'#1C2251':'#161B40',label:name+': installation photos'})});};
+    if(!('IntersectionObserver' in window)){build();return;}
+    const near=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){near.disconnect();build();}},{rootMargin:'900px 0px'});
+    near.observe(box);
   });
-  if(rings.length){let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>rings.forEach(r=>r.setCardWidth(ccWidth())),150);});}
+  let rt=0;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>rings.forEach(r=>r.cc.setCardWidth(ccWidth(),ccFit(r.n))),150);});
 
   /* quick links under each sector intro, to the blocks that sector actually has (resources.js has built them) */
   const CHEV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
