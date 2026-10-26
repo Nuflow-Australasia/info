@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="../assets/img/nuflow-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../assets/css/landing.css?v=2">
+<link rel="stylesheet" href="../assets/css/landing.css?v=3">
 <script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
@@ -214,17 +214,25 @@
 </section>
 
 <section class="reach band-navy" id="reach">
-  <div class="wrap reach-grid">
-    <div class="reveal">
-      <span class="kick">Our reach</span>
-      <h2><b>58+</b>locations</h2>
-      <p>A trained local network across Australia, New Zealand and Asia.</p>
+  <div class="reach-scene" id="reachScene">
+    <div class="reach-stage">
+      <div class="reach-earth" id="reachEarth">
+        <img class="reach-night" src="../assets/img/reach-night.jpg" alt="Australia, New Zealand and South-East Asia seen from orbit at night, with city lights along the coasts" loading="lazy">
+        <img class="reach-day" id="reachDay" src="../assets/img/reach-day.webp" alt="" loading="lazy">
+      </div>
+      <div class="reach-shade" aria-hidden="true"></div>
+      <div class="reach-copy">
+        <div class="wrap">
+          <h2 class="reveal"><span class="fig">58+</span> <span class="rest">locations across Australasia</span></h2>
+          <p class="reveal">A trained local network across Australia, New Zealand and Asia.</p>
+        </div>
+      </div>
     </div>
-    <ul class="cities reveal" aria-label="Locations include">
-      <li class="region">Australia</li><li>Brisbane</li><li>Gold Coast</li><li>Sydney</li><li>Newcastle</li><li>Melbourne</li><li>Adelaide</li><li>Perth</li><li>Canberra</li><li>Hobart</li><li>Darwin</li><li>Townsville</li>
-      <li class="region">New Zealand</li><li>Auckland</li><li>Wellington</li><li>Christchurch</li>
-      <li class="region">Asia</li><li>Singapore</li>
-    </ul>
+  </div>
+  <div class="wrap reach-places">
+    <div class="place reveal"><h3>Australia</h3><ul class="two-col"><li>Brisbane</li><li>Gold Coast</li><li>Sydney</li><li>Newcastle</li><li>Melbourne</li><li>Adelaide</li><li>Perth</li><li>Canberra</li><li>Hobart</li><li>Darwin</li><li>Townsville</li></ul></div>
+    <div class="place reveal"><h3>New Zealand</h3><ul><li>Auckland</li><li>Wellington</li><li>Christchurch</li></ul></div>
+    <div class="place reveal"><h3>Asia</h3><ul><li>Singapore</li></ul></div>
   </div>
 </section>
 </main>
@@ -275,6 +283,23 @@
     }
     addEventListener('scroll',()=>{if(!hp){hp=true;requestAnimationFrame(hero);}},{passive:true});
     addEventListener('resize',hero);hero();
+  }
+
+  /* reach: daylight sweeps west across Australasia while the globe is held on screen (fallback for
+     browsers without CSS view timelines; landing.css runs it otherwise) */
+  let cssView=false;try{cssView=CSS.supports('animation-timeline: view()');}catch(e){}
+  const scene=document.getElementById('reachScene'),day=document.getElementById('reachDay'),earth=document.getElementById('reachEarth');
+  if(!cssView&&scene&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const c01=v=>Math.max(0,Math.min(1,v));
+    let rp=false;
+    function reach(){
+      rp=false;const r=scene.getBoundingClientRect(),hold=r.height-innerHeight;
+      const p=hold>0?c01(-r.top/hold):0, d=c01((p-0.08)/0.7);
+      const pos=(d*100).toFixed(1)+'% 0';day.style.webkitMaskPosition=pos;day.style.maskPosition=pos;
+      earth.style.transform='scale('+(1.12-p*0.12).toFixed(3)+')';
+    }
+    addEventListener('scroll',()=>{if(!rp){rp=true;requestAnimationFrame(reach);}},{passive:true});
+    addEventListener('resize',reach);reach();
   }
 
   const els=[...document.querySelectorAll('.reveal')];

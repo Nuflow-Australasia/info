@@ -319,16 +319,45 @@ button.case-img:hover .play{transform:translate(-50%,-50%) scale(1.08)}
 .lib-note{margin-top:22px;color:var(--fg2);font-size:14px}
 .lib-note a{color:var(--navy);font-weight:700;text-decoration-color:var(--green);text-underline-offset:3px}
 
-/* ================= REACH ================= */
-.reach{padding:100px 0;background:var(--bg)}
-.reach-grid{display:grid;grid-template-columns:1fr 1.3fr;gap:56px;align-items:center}
-.reach h2{font-weight:900;text-transform:uppercase;font-size:clamp(2rem,4.4vw,3.4rem);margin-top:20px}
-.reach h2 b{display:block;color:#7cc66a;font-size:1.6em;line-height:1}
-.reach p{margin-top:16px;color:var(--fg2);font-size:16px;line-height:1.7}
-.cities{display:flex;flex-wrap:wrap;gap:8px;list-style:none}
-.cities li{font:800 13px var(--display);letter-spacing:.06em;text-transform:uppercase;padding:10px 14px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
-.cities li.region{border-color:transparent;background:var(--green);color:var(--navy)}
-@media(max-width:860px){.reach{padding:72px 0}.reach-grid{grid-template-columns:1fr;gap:28px}}
+/* ================= REACH: dawn over Australasia =================
+   The globe is held on screen for a screen and a bit of scroll while daylight sweeps west across it,
+   from the sunrise on the right to the lit cities on the left. A soft-edged mask on the day picture
+   is the line between night and day. */
+.reach{background:var(--bg)}
+.reach-scene{position:relative;height:230vh;height:230svh;view-timeline:--reach block}
+.reach-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#03050d}
+.reach-earth{position:absolute;inset:0;transform:scale(1.12);transform-origin:46% 62%;will-change:transform}
+.reach-earth img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 60%}
+.reach-day{-webkit-mask-image:linear-gradient(100deg,transparent 0 42%,#000 58% 100%);mask-image:linear-gradient(100deg,transparent 0 42%,#000 58% 100%);-webkit-mask-size:300% 100%;mask-size:300% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:0% 0;mask-position:0% 0}
+.reach-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(3,5,13,.92) 0%,rgba(3,5,13,.55) 26%,rgba(3,5,13,0) 48%)}
+.reach-copy{position:absolute;left:0;right:0;bottom:clamp(48px,9vh,96px);z-index:2}
+.reach h2{font-weight:900;text-transform:uppercase;line-height:.95;letter-spacing:-.01em}
+.reach h2 .fig{display:block;font-size:clamp(5rem,13vw,11rem);color:#7cc66a;line-height:.85;letter-spacing:-.03em}
+.reach h2 .rest{display:block;margin-top:10px;font-size:clamp(1.5rem,2.8vw,2.5rem)}
+.reach-copy p{margin-top:16px;max-width:520px;font-size:17px;line-height:1.6;color:rgba(255,255,255,.88)}
+.reach-places{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;padding-top:88px;padding-bottom:112px}
+.place h3{font:900 clamp(1.1rem,1.6vw,1.4rem)/1.1 var(--display);text-transform:uppercase;color:#7cc66a;margin-bottom:18px}
+.place ul{list-style:none}
+.place ul.two-col{columns:2;column-gap:32px}
+.place li{font:700 17px/1.3 var(--display);padding:9px 0;break-inside:avoid}
+@supports (animation-timeline: view()){
+  .reach-day{animation:dawn linear both;animation-timeline:--reach;animation-range:contain 8% contain 78%}
+  .reach-earth{animation:reachDrift linear both;animation-timeline:--reach;animation-range:contain 0% contain 100%}
+}
+@keyframes dawn{from{-webkit-mask-position:0% 0;mask-position:0% 0}to{-webkit-mask-position:100% 0;mask-position:100% 0}}
+@keyframes reachDrift{from{transform:scale(1.12)}to{transform:scale(1)}}
+@media(max-width:860px){
+  .reach-earth img{object-position:50% 62%}
+  .reach h2 .rest{font-size:clamp(1.25rem,5.6vw,1.6rem)}
+  .reach-places{grid-template-columns:1fr 1fr;gap:32px 24px;padding-top:56px;padding-bottom:80px}
+  .place:first-child{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:reduce){
+  .reach-scene{height:auto}
+  .reach-stage{position:relative;height:90vh;height:90svh}
+  .reach-earth{transform:none;animation:none}
+  .reach-day{animation:none;-webkit-mask-image:none;mask-image:none}
+}
 
 /* ================= FOOTER ================= */
 .foot{background:var(--bg-deep);padding:64px 0 36px;border-top:6px solid var(--green)}
