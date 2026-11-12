@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Move over the pipe cutaway to x-ray through the Nuflow Blueline Liner and see the components underneath.">
+<title>Liner X-Ray View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one centred stage (the render) with a slim caption above and controls below. */
+  :root {
+    --bg: #eceef1;
+    --surface: #f7f8fa;
+    --fg: #16202c;
+    --muted: #5b6878;
+    --line: #d3d8df;
+    --accent: #1f4fd8;
+    --scan: 0, 170, 255;
+    --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #10151c; --surface: #18202a; --fg: #e6ebf2; --muted: #93a0b2;
+      --line: #2a3442; --accent: #6f95ff; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10151c; --surface: #18202a; --fg: #e6ebf2; --muted: #93a0b2;
+    --line: #2a3442; --accent: #6f95ff; color-scheme: dark;
+  }
+
+  html, body { background: var(--bg); color: var(--fg); }
+  body { font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+
+  .wrap {
+    max-width: 1100px; margin: 0 auto;
+    padding-block: 32px 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid; gap: 18px;
+  }
+
+  header { display: grid; gap: 6px; }
+  .eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--accent);
+  }
+  h1 { margin: 0; font-size: clamp(24px, 3.4vw, 34px); font-weight: 600; letter-spacing: -.01em; text-wrap: balance; }
+  header p { margin: 0; color: var(--muted); max-width: 62ch; }
+
+  /* Stage */
+  .stage {
+    position: relative; width: 100%; max-width: 100%;
+    aspect-ratio: 2000 / 1125;
+    border-radius: 14px; overflow: hidden;
+    background: #e9e9e9;
+    border: 1px solid var(--line);
+    cursor: none; touch-action: none; user-select: none; -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+  }
+  .stage:focus-visible { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent); }
+  .stage img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; display: block; pointer-events: none; -webkit-user-drag: none;
+  }
+  .xray { clip-path: circle(0px at 50% 50%); will-change: clip-path; }
+
+  /* Lens ring drawn over the reveal */
+  .lens {
+    position: absolute; left: 0; top: 0; width: 0; height: 0;
+    border-radius: 50%; pointer-events: none; opacity: 0;
+    transition: opacity .2s ease;
+    box-shadow:
+      0 0 0 1.5px rgba(255,255,255,.9),
+      0 0 0 3px rgba(var(--scan), .55),
+      0 8px 28px rgba(10, 30, 60, .28),
+      inset 0 0 36px rgba(var(--scan), .28);
+    overflow: hidden;
+    will-change: transform, width, height;
+  }
+  .lens.on { opacity: 1; }
+  .lens::before {               /* scanlines */
+    content: ""; position: absolute; inset: -20% 0;
+    background: repeating-linear-gradient(180deg, rgba(var(--scan), .10) 0 1px, transparent 1px 4px);
+    animation: scan 2.4s linear infinite;
+  }
+  .lens::after {                /* crosshair ticks */
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)) center top / 1.5px 10px no-repeat,
+      linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)) center bottom / 1.5px 10px no-repeat,
+      linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)) left center / 10px 1.5px no-repeat,
+      linear-gradient(rgba(255,255,255,.85), rgba(255,255,255,.85)) right center / 10px 1.5px no-repeat;
+  }
+  @keyframes scan { from { transform: translateY(-8%); } to { transform: translateY(8%); } }
+
+  .tag {
+    position: absolute; left: 0; top: 0; pointer-events: none;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 500; letter-spacing: .14em;
+    color: #fff; background: rgba(12, 28, 52, .78);
+    padding: 3px 7px; border-radius: 4px; white-space: nowrap;
+    opacity: 0; transition: opacity .2s ease;
+  }
+  .tag.on { opacity: 1; }
+
+  .hint {
+    position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%);
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #fff; background: rgba(12, 28, 52, .78);
+    padding: 7px 12px; border-radius: 999px; pointer-events: none;
+    transition: opacity .3s ease; white-space: nowrap;
+  }
+  .hint .dot { width: 8px; height: 8px; border-radius: 50%; background: rgb(var(--scan)); animation: pulse 1.6s ease-in-out infinite; }
+  .hint.gone { opacity: 0; }
+  @keyframes pulse { 50% { transform: scale(1.6); opacity: .4; } }
+
+  /* Controls */
+  .controls {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px;
+    padding: 12px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface);
+  }
+  .controls label { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); }
+  .controls input[type=range] { width: 160px; max-width: 40vw; accent-color: var(--accent); }
+  .btn {
+    font: 500 14px/1 var(--font-body); color: var(--fg); background: transparent;
+    border: 1px solid var(--line); border-radius: 8px; padding: 9px 14px; cursor: pointer;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .keys { margin-left: auto; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+  @media (max-width: 640px) { .keys { display: none; } .stage { border-radius: 10px; } }
+  @media (hover: none) { .stage { cursor: default; } }
+
+  /* Callouts: anchor dot on the part, leader line, label chip */
+  .leaders {
+    position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+    filter: drop-shadow(0 0 1.5px rgba(8, 20, 40, .7));
+  }
+  .leaders line { stroke: #fff; stroke-width: 1.5; vector-effect: non-scaling-stroke; opacity: 0; transition: opacity .2s ease; }
+  .leaders line.on { opacity: .95; }
+  .pin {
+    position: absolute; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%;
+    background: #fff; pointer-events: none;
+    box-shadow: 0 0 0 2px rgb(var(--scan)), 0 0 0 4px rgba(8, 20, 40, .3);
+    opacity: 0; transform: scale(.3); transition: opacity .2s ease, transform .2s ease;
+  }
+  .callout {
+    position: absolute; transform: translate(-50%, -50%) scale(.92); pointer-events: none;
+    display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+    font-size: 13px; font-weight: 500; color: #fff;
+    background: rgba(12, 28, 52, .86); padding: 5px 10px 5px 5px; border-radius: 6px;
+    box-shadow: 0 4px 14px rgba(8, 20, 40, .25);
+    opacity: 0; transition: opacity .2s ease, transform .2s ease;
+  }
+  .pin.on, .callout.on { opacity: 1; }
+  .pin.on { transform: scale(1); }
+  .callout.on { transform: translate(-50%, -50%) scale(1); }
+  .num {
+    display: inline-grid; place-items: center; width: 19px; height: 19px; border-radius: 50%;
+    background: rgb(var(--scan)); color: #04203a; font: 600 11px/1 var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .stage.compact .callout { padding: 3px; gap: 0; }
+  .stage.compact .callout .name { display: none; }
+
+  /* Key under the stage, lit for parts currently in view */
+  .legend {
+    list-style: none; margin: 0; padding: 0;
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .legend li {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px 6px 6px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--muted);
+    font-size: 14px; transition: border-color .2s ease, color .2s ease, background .2s ease;
+  }
+  .legend li .num { background: var(--line); color: var(--muted); transition: background .2s ease, color .2s ease; }
+  .legend li.lit { border-color: rgb(var(--scan)); color: var(--fg); }
+  .legend li.lit .num { background: rgb(var(--scan)); color: #04203a; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lens::before, .hint .dot { animation: none; }
+    .pin, .callout, .leaders line, .legend li { transition: none; }
+  }
+</style>
+
+<style>
+  :root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  body { margin: 0; -webkit-text-size-adjust: 100%; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+
+  /* Embed mode (?embed): no heading, no outer padding, transparent page so it sits on the host site */
+  html.embed header { display: none; }
+  html.embed .wrap { max-width: none; padding: 2px; }
+  html.embed, html.embed body { background: transparent; }
+</style>
+<script>
+  // ?embed hides the heading; ?theme=light|dark forces a theme (embed defaults to light).
+  (function () {
+    var q = new URLSearchParams(location.search), root = document.documentElement;
+    var embed = q.has('embed'), theme = q.get('theme');
+    if (embed) root.classList.add('embed');
+    if (theme === 'light' || theme === 'dark') root.setAttribute('data-theme', theme);
+    else if (embed) root.setAttribute('data-theme', 'light');
+  })();
+</script>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Inside the liner</span>
+    <h1>See what sits under the liner</h1>
+    <p>Move your mouse over the pipe, or drag a finger across it, to look through the liner at the components underneath. Each part is labelled as the lens passes over it.</p>
+  </header>
+
+  <div class="stage" id="stage" tabindex="0" role="img"
+       aria-label="Cutaway of a host pipe with a liner on an inflatable packer. Move the lens over the liner to reveal the components underneath.">
+    <img src="liner-outer.webp" alt="" draggable="false">
+    <img class="xray" id="xray" src="liner-xray.webp" alt="" draggable="false">
+    <svg class="leaders" id="leaders" viewBox="0 0 2000 1125" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div class="lens" id="lens"></div>
+    <div id="pins" aria-hidden="true"></div>
+    <div class="tag" id="tag">X-RAY</div>
+    <div class="hint" id="hint"><span class="dot"></span><span id="hintText">Hover over the pipe</span></div>
+  </div>
+
+  <ol class="legend" id="legend" aria-label="Components"></ol>
+
+  <div class="controls">
+    <label for="size">Lens size <input id="size" type="range" min="8" max="40" value="17"></label>
+    <button class="btn" id="full" type="button" aria-pressed="false">Show full x-ray</button>
+    <span class="keys">Keyboard: arrows move · Enter toggles full view</span>
+  </div>
+</div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const xray  = document.getElementById('xray');
+  const lens  = document.getElementById('lens');
+  const tag   = document.getElementById('tag');
+  const hint  = document.getElementById('hint');
+  const size  = document.getElementById('size');
+  const fullBtn = document.getElementById('full');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (matchMedia('(hover: none)').matches) document.getElementById('hintText').textContent = 'Drag across the pipe';
+
+  // Positions are fractions of the stage; radius is a fraction of stage width.
+  let tx = .5, ty = .5, x = .5, y = .5;
+  let r = 0, tr = 0;
+  let base = +size.value / 100;
+  let active = false, full = false, raf = 0;
+
+  const FULL_R = 1.25; // enough to cover the whole frame from any point
+
+  // Components: anchor point on the part and label position, in render pixels (2000 x 1125).
+  const PARTS = [
+    { name: 'Host Pipe',              a: [300, 600],  l: [250, 930] },
+    { name: 'Nuflow Blueline Liner',  a: [740, 600],  l: [560, 300] },
+    { name: 'Vinyl Retention Sleeve', a: [790, 560],  l: [1000, 210] },
+    { name: 'Rubber Bladder',         a: [1100, 515], l: [1130, 840] },
+    { name: 'End Cap',                a: [1330, 470], l: [1560, 740] },
+  ];
+  const W0 = 2000, H0 = 1125, NS = 'http://www.w3.org/2000/svg';
+  const svg = document.getElementById('leaders');
+  const pinsEl = document.getElementById('pins');
+  const legend = document.getElementById('legend');
+  PARTS.forEach((p, i) => {
+    const n = i + 1;
+    p.line = document.createElementNS(NS, 'line');
+    p.line.setAttribute('x1', p.a[0]); p.line.setAttribute('y1', p.a[1]);
+    p.line.setAttribute('x2', p.l[0]); p.line.setAttribute('y2', p.l[1]);
+    svg.appendChild(p.line);
+    p.pin = document.createElement('div'); p.pin.className = 'pin';
+    p.pin.style.left = (p.a[0] / W0 * 100) + '%'; p.pin.style.top = (p.a[1] / H0 * 100) + '%';
+    p.label = document.createElement('div'); p.label.className = 'callout';
+    p.label.style.left = (p.l[0] / W0 * 100) + '%'; p.label.style.top = (p.l[1] / H0 * 100) + '%';
+    p.label.innerHTML = `<span class="num">${n}</span><span class="name">${p.name}</span>`;
+    pinsEl.append(p.pin, p.label);
+    p.key = document.createElement('li');
+    p.key.innerHTML = `<span class="num">${n}</span>${p.name}`;
+    legend.appendChild(p.key);
+    p.shown = null;
+  });
+
+  function target() { tr = full ? FULL_R : (active ? base : 0); kick(); }
+
+  function point(e) {
+    const b = stage.getBoundingClientRect();
+    tx = Math.min(1, Math.max(0, (e.clientX - b.left) / b.width));
+    ty = Math.min(1, Math.max(0, (e.clientY - b.top) / b.height));
+  }
+
+  function draw() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    const X = x * w, Y = y * h, R = Math.max(0, r * w);
+    xray.style.clipPath = `circle(${R.toFixed(1)}px at ${X.toFixed(1)}px ${Y.toFixed(1)}px)`;
+    const showRing = R > 2 && !full;
+    lens.classList.toggle('on', showRing);
+    tag.classList.toggle('on', showRing && R > 28);
+    lens.style.width = lens.style.height = (2 * R) + 'px';
+    lens.style.transform = `translate(${X - R}px, ${Y - R}px)`;
+    tag.style.transform = `translate(${X + R * .62}px, ${Y - R * .9}px)`;
+
+    // A part is labelled while its anchor sits inside the lens, or always in full view.
+    stage.classList.toggle('compact', w < 640);
+    const fullView = full && r > 1;
+    for (const p of PARTS) {
+      const dx = p.a[0] / W0 * w - X, dy = p.a[1] / H0 * h - Y;
+      const on = fullView || (R > 12 && Math.hypot(dx, dy) < R * .9);
+      if (on === p.shown) continue;
+      p.shown = on;
+      p.line.classList.toggle('on', on);
+      p.pin.classList.toggle('on', on);
+      p.label.classList.toggle('on', on);
+      p.key.classList.toggle('lit', on);
+    }
+  }
+
+  function step() {
+    const k = reduce ? 1 : .22, kr = reduce ? 1 : (full ? .09 : .18);
+    x += (tx - x) * k; y += (ty - y) * k; r += (tr - r) * kr;
+    draw();
+    const settled = Math.abs(tx - x) < .0005 && Math.abs(ty - y) < .0005 && Math.abs(tr - r) < .0005;
+    if (settled) { x = tx; y = ty; r = tr; draw(); raf = 0; return; }
+    raf = requestAnimationFrame(step);
+  }
+  function kick() { if (!raf) raf = requestAnimationFrame(step); }
+
+  function dismissHint() { hint.classList.add('gone'); }
+
+  // Mouse / pen
+  stage.addEventListener('pointerenter', e => {
+    if (e.pointerType === 'touch') return;
+    point(e); if (!active && !full) { x = tx; y = ty; }
+    active = true; target(); dismissHint();
+  });
+  stage.addEventListener('pointermove', e => {
+    if (e.pointerType === 'touch' && !touching) return;
+    point(e); if (!active) { active = true; target(); }
+    kick();
+  });
+  stage.addEventListener('pointerleave', e => {
+    if (e.pointerType === 'touch') return;
+    active = false; target();
+  });
+
+  // Touch: lens follows the finger and stays where it was lifted
+  let touching = false;
+  const endTouch = e => { if (e.pointerType === 'touch') touching = false; };
+  stage.addEventListener('pointerup', endTouch);
+  stage.addEventListener('pointercancel', endTouch);
+  stage.addEventListener('pointerdown', e => {
+    if (e.pointerType !== 'touch') return;
+    touching = true;
+    try { stage.setPointerCapture(e.pointerId); } catch (_) {}
+    point(e); if (!active) { x = tx; y = ty; }
+    active = true; target(); dismissHint();
+  });
+
+  // Tap outside the stage hides a resting touch lens
+  document.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'touch' && !stage.contains(e.target) && active && !full) { active = false; target(); }
+  });
+
+  // Keyboard
+  stage.addEventListener('focus', () => { if (!active) { active = true; target(); } dismissHint(); });
+  stage.addEventListener('blur', () => { active = false; target(); });
+  stage.addEventListener('keydown', e => {
+    const d = e.shiftKey ? .08 : .03;
+    const moves = { ArrowLeft: [-d, 0], ArrowRight: [d, 0], ArrowUp: [0, -d], ArrowDown: [0, d] };
+    if (moves[e.key]) {
+      e.preventDefault();
+      tx = Math.min(1, Math.max(0, tx + moves[e.key][0]));
+      ty = Math.min(1, Math.max(0, ty + moves[e.key][1]));
+      kick();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault(); setFull(!full);
+    }
+  });
+
+  // Controls
+  size.addEventListener('input', () => { base = +size.value / 100; if (!active && !full) { active = true; } target(); });
+  function setFull(on) {
+    full = on; fullBtn.setAttribute('aria-pressed', String(on));
+    fullBtn.textContent = on ? 'Hide full x-ray' : 'Show full x-ray';
+    if (on) dismissHint();
+    target();
+  }
+  fullBtn.addEventListener('click', () => setFull(!full));
+
+  addEventListener('resize', draw);
+  draw();
+})();
+</script>
+
+<script>
+  // In embed mode, tell the host page how tall the content is so the iframe can fit it.
+  (function () {
+    if (!document.documentElement.classList.contains('embed') || window.parent === window) return;
+    var last = 0;
+    function send() {
+      var h = Math.ceil(document.querySelector('.wrap').getBoundingClientRect().height);
+      if (h !== last) { last = h; window.parent.postMessage({ type: 'nuflow-liner-xray:height', height: h }, '*'); }
+    }
+    new ResizeObserver(send).observe(document.querySelector('.wrap'));
+    addEventListener('load', send);
+  })();
+</script>
+
+</body>
+</html>
